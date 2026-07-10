@@ -1,58 +1,131 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import { ClerkProvider } from "@clerk/tanstack-react-start"
+import { shadcn } from "@clerk/ui/themes"
+import {
+  HeadContent,
+  Link,
+  Scripts,
+  createRootRoute,
+} from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
 import appCss from "../styles.css?url"
+
+if (import.meta.env.DEV && !import.meta.env.SSR) {
+  void import("react-grab")
+}
+
+const SITE_TITLE = "Ai Labs — Adapt, develop, and learn with AI"
+const SITE_DESCRIPTION =
+  "Ai Labs helps companies adapt, develop, and learn with AI through Academy, Agentic, and Aperture. Based in El Salvador — open beyond."
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      {
-        title: "TanStack Start Starter",
-      },
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: SITE_TITLE },
+      { name: "description", content: SITE_DESCRIPTION },
+      { name: "theme-color", content: "#303030" },
+      { name: "application-name", content: "Ai Labs" },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Ai Labs" },
+      { property: "og:title", content: SITE_TITLE },
+      { property: "og:description", content: SITE_DESCRIPTION },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: SITE_TITLE },
+      { name: "twitter:description", content: SITE_DESCRIPTION },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "alternate icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "manifest", href: "/manifest.json" },
+      { rel: "stylesheet", href: appCss },
     ],
   }),
-  notFoundComponent: () => (
-    <main className="container mx-auto p-4 pt-16">
-      <h1>404</h1>
-      <p>The requested page could not be found.</p>
-    </main>
-  ),
+  notFoundComponent: RootNotFound,
   shellComponent: RootDocument,
 })
 
+const rootNotFoundLinkClassName =
+  "bg-primary text-primary-foreground focus-visible:ring-ring/50 inline-flex h-11 items-center rounded-md px-5 text-sm font-medium transition-colors hover:brightness-95 focus-visible:ring-2 focus-visible:outline-none"
+
+function RootNotFound() {
+  return (
+    <main
+      id="main"
+      className="page-gutter max-w-content section-y mx-auto min-h-dvh"
+    >
+      <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+        404
+      </p>
+      <div className="mt-4 flex flex-col gap-2">
+        <h1
+          lang="en"
+          className="font-display text-foreground text-4xl font-semibold tracking-tight md:text-5xl"
+        >
+          Page not found
+        </h1>
+        <p lang="es" className="font-display text-foreground text-2xl font-semibold tracking-tight">
+          Página no encontrada
+        </p>
+      </div>
+      <p lang="en" className="text-muted-foreground mt-6 max-w-prose text-lg">
+        That page doesn&rsquo;t exist. Head to the English or Spanish home page.
+      </p>
+      <p lang="es" className="text-muted-foreground mt-2 max-w-prose text-lg">
+        Esa página no existe. Ve a la página de inicio en inglés o español.
+      </p>
+      <div className="mt-8 flex flex-wrap gap-4">
+        <Link
+          to="/$locale"
+          params={{ locale: "en" }}
+          lang="en"
+          className={rootNotFoundLinkClassName}
+        >
+          English home
+        </Link>
+        <Link
+          to="/$locale"
+          params={{ locale: "es" }}
+          lang="es"
+          className={rootNotFoundLinkClassName}
+        >
+          Inicio en español
+        </Link>
+      </div>
+    </main>
+  )
+}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        {children}
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        <ClerkProvider appearance={{ theme: shadcn }}>
+          <ThemeProvider defaultTheme="system" storageKey="ailabs-theme">
+            {children}
+            <Toaster />
+            {import.meta.env.DEV ? (
+              <TanStackDevtools
+                config={{
+                  position: "bottom-right",
+                }}
+                plugins={[
+                  {
+                    name: "Tanstack Router",
+                    render: <TanStackRouterDevtoolsPanel />,
+                  },
+                ]}
+              />
+            ) : null}
+          </ThemeProvider>
+        </ClerkProvider>
         <Scripts />
       </body>
     </html>

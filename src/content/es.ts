@@ -2,6 +2,11 @@ import type { SiteContent } from "./types"
 
 export const es: SiteContent = {
   locale: "es",
+  meta: {
+    title: "Ai Labs — Adáptate, desarrolla y aprende con IA",
+    description:
+      "Ai Labs ayuda a las empresas a adaptarse, desarrollar y aprender con IA a través de Academy, Agentic y Aperture. Con base en El Salvador.",
+  },
   chrome: {
     nav: {
       pillars: [
@@ -38,8 +43,183 @@ export const es: SiteContent = {
       ],
       copyright: "© {year} Ai Labs",
     },
+  },
+  microcopy: {
+    loading: "Cargando…",
+    notFoundTitle: "Página no encontrada",
+    notFoundBody: "Esa página no existe. Vuelve al inicio o háblanos.",
+    notFoundCtaHome: "Ir al inicio",
+    languageSwitch: "EN",
+    skipToContent: "Saltar al contenido",
+    menuOpen: "Abrir menú",
+    menuClose: "Cerrar menú",
+    themeCycle: "Cambiar tema de color",
+    themeToLight: "Cambiar a tema claro",
+    themeToDark: "Cambiar a tema oscuro",
+    themeToSystem: "Cambiar a tema del sistema",
+  },
+  home: {
+    hero: {
+      label: "IA práctica",
+      headline: "Adáptate, desarrolla y aprende con IA",
+      body: "Ayudamos a empresas con formación, desarrollo de software y una comunidad de builders. Con base en El Salvador — y más allá.",
+      primaryCta: { label: "Hablemos", href: "#contact" },
+      secondaryCta: { label: "Conoce los pilares", href: "#pillars" },
+      proof: { value: "700+", label: "Builders" },
+      slides: [
+        { value: "700+", label: "Builders" },
+        { value: "30+", label: "Eventos realizados" },
+        { value: "8", label: "Partners activos" },
+      ],
+      mediaSrc: "/carousel/1.webp",
+      mediaAlt: "Sesión de comunidad de Ai Labs",
+    },
+    about: {
+      label: "Por qué vienen las empresas",
+      body: "Necesitan IA que puedan usar: formar un equipo, lanzar un producto, o acercarse a builders que ya usan las herramientas. Corremos las sesiones y entregamos el software.",
+      stats: [
+        { value: "30+", label: "Eventos realizados" },
+        { value: "8", label: "Partners activos" },
+      ],
+      bold: "Adaptarse es que tu equipo use las herramientas. Desarrollar es que algo se lance. Aprender es que la práctica quede — no otro deck sobre “el futuro de la IA.”",
+      mediaSrc: "/carousel/2.webp",
+      mediaAlt: "Builders colaborando en un evento de Ai Labs",
+      toastTitle: "Sesión en curso",
+      toastMeta: "El Salvador",
+    },
+    features: {
+      label: "Cómo trabajamos",
+      headline: "Tres formas de trabajar con nosotros",
+      cta: { label: "Hablemos", href: "#contact" },
+      showcaseImageSrc: "/carousel/3.webp",
+      showcaseImageAlt: "Taller práctico en Ai Labs",
+      accordion: [
+        {
+          id: "academy",
+          title: "Academy",
+          subtitle: "Aprende con nosotros",
+          body: "Consultorías, talleres, bootcamps y residencias para aprender IA en la práctica.",
+        },
+        {
+          id: "agentic",
+          title: "Agentic",
+          subtitle: "Construye con nosotros",
+          body: "Software bajo demanda, más flujos y automatización, con IA.",
+        },
+        {
+          id: "aperture",
+          title: "Aperture",
+          subtitle: "Conéctate con nosotros",
+          body: "Un hub que conecta personas, perfiles con los que trabajamos y las empresas con las que hacemos partnership.",
+        },
+      ],
+      cards: [
+        {
+          id: "academy",
+          title: "Academy",
+          body: "Para equipos, founders y estudiantes que necesitan práctica, no clases pasivas.",
+          cta: { label: "Ver Academy", href: "/academy" },
+        },
+        {
+          id: "agentic",
+          title: "Agentic",
+          body: "Para equipos que necesitan algo usable, no otro deck de prototipos.",
+          cta: { label: "Ver Agentic", href: "/agentic" },
+        },
+        {
+          id: "aperture",
+          title: "Aperture",
+          body: "Para personas y empresas que quieren la sala, no una lista de correo.",
+          cta: { label: "Ver Aperture", href: "/aperture" },
+        },
+      ],
+    },
+    partner: {
+      headline: "Lo que significa estar aquí",
+      lead: "Práctica, gente que shippea y una puerta de entrada — el cuarto de donde sale el trabajo.",
+      voices: [
+        { quote: "Aprendo construyendo con otros", role: "Builder" },
+        { quote: "Sesiones que quedan después del taller", role: "Academy" },
+        { quote: "Intros reales, no un newsletter", role: "Aperture" },
+      ],
+      members: [
+        { id: "m-01", initial: "M" },
+        { id: "m-02", initial: "R" },
+        { id: "m-03", initial: "A" },
+        { id: "m-04", initial: "L" },
+        { id: "m-05", initial: "S" },
+        { id: "m-06", initial: "D" },
+        { id: "m-07", initial: "C" },
+        { id: "m-08", initial: "J" },
+        { id: "m-09", initial: "E" },
+        { id: "m-10", initial: "N" },
+        { id: "m-11", initial: "V" },
+        { id: "m-12", initial: "K" },
+        { id: "m-13", initial: "P" },
+        { id: "m-14", initial: "T" },
+        { id: "m-15", initial: "B" },
+        { id: "m-16", initial: "G" },
+        { id: "m-17", initial: "H" },
+        { id: "m-18", initial: "F" },
+        { id: "m-19", initial: "W" },
+        { id: "m-20", initial: "Y" },
+        { id: "m-21", initial: "Q" },
+        { id: "m-22", initial: "Z" },
+        { id: "m-23", initial: "U" },
+        { id: "m-24", initial: "I" },
+        { id: "m-25", initial: "O" },
+        { id: "m-26", initial: "X" },
+        { id: "m-27", initial: "A" },
+        { id: "m-28", initial: "S" },
+        { id: "m-29", initial: "M" },
+        { id: "m-30", initial: "R" },
+        { id: "m-31", initial: "L" },
+        { id: "m-32", initial: "D" },
+        { id: "m-33", initial: "C" },
+        { id: "m-34", initial: "N" },
+        { id: "m-35", initial: "J" },
+        { id: "m-36", initial: "E" },
+        { id: "m-37", initial: "P" },
+        { id: "m-38", initial: "V" },
+        { id: "m-39", initial: "T" },
+        { id: "m-40", initial: "K" },
+        { id: "m-41", initial: "B" },
+        { id: "m-42", initial: "G" },
+        { id: "m-43", initial: "H" },
+        { id: "m-44", initial: "F" },
+        { id: "m-45", initial: "W" },
+        { id: "m-46", initial: "Y" },
+        { id: "m-47", initial: "Q" },
+        { id: "m-48", initial: "Z" },
+        { id: "m-49", initial: "U" },
+        { id: "m-50", initial: "I" },
+        { id: "m-51", initial: "O" },
+        { id: "m-52", initial: "X" },
+        { id: "m-53", initial: "M" },
+        { id: "m-54", initial: "A" },
+        { id: "m-55", initial: "R" },
+        { id: "m-56", initial: "S" },
+        { id: "m-57", initial: "L" },
+        { id: "m-58", initial: "D" },
+        { id: "m-59", initial: "C" },
+        { id: "m-60", initial: "N" },
+        { id: "m-61", initial: "J" },
+        { id: "m-62", initial: "E" },
+        { id: "m-63", initial: "P" },
+        { id: "m-64", initial: "V" },
+      ],
+    },
+    trust: {
+      label: "Prueba",
+      headline: "Por qué trabajan con nosotros",
+      stat: { value: "700+", label: "Builders en la comunidad" },
+      quote:
+        "Combinamos aprendizaje práctico, trabajo de software y acceso al ecosistema. La mayoría de alternativas solo cubre una de esas partes.",
+      attribution: "Ai Labs",
+      portraitSrc: "/carousel/5.webp",
+      portraitAlt: "Miembro de la comunidad Ai Labs en un evento",
+    },
     contact: {
-      sectionId: "contact",
       title: "Hablemos",
       lead: "Cuéntanos qué necesitas: formación, software, o conectar con la comunidad. Te respondemos.",
       nameLabel: "Nombre",
@@ -58,204 +238,59 @@ export const es: SiteContent = {
       error: "Algo falló. Intenta de nuevo o escríbenos.",
     },
   },
-  home: {
-    meta: {
-      title: "Ai Labs — Adáptate, desarrolla y aprende con IA",
-      description:
-        "Ai Labs ayuda a las empresas a adaptarse, desarrollar y aprender con IA a través de Academy, Agentic y Aperture. Con base en El Salvador.",
+  redeem: {
+    metaTitle: "Canjear créditos",
+    eventLabel: "Evento",
+    signInPrompt:
+      "Inicia sesión con el mismo correo con el que te registraste al evento.",
+    signInCta: "Iniciar sesión para canjear",
+    claimCta: "Canjear créditos",
+    claiming: "Canjeando…",
+    signedInAs: "Sesión iniciada como {email}",
+    yourCodes: "Tus códigos",
+    alreadyRedeemed: "Ya canjeaste estos créditos para este evento.",
+    copyCode: "Copiar",
+    copied: "Copiado",
+    invalidTitle: "Enlace no encontrado",
+    invalidBody:
+      "Este enlace de canje no es válido. Revisa la URL del organizador.",
+    inactiveTitle: "Canje cerrado",
+    inactiveBody: "Este evento ya no acepta canjes de créditos.",
+    notEligibleTitle: "Correo no está en la lista",
+    notEligibleBody:
+      "El correo de tu sesión no está registrado en este evento. Usa el de tu registro en Luma.",
+    soldOutTitle: "Códigos agotados",
+    soldOutBody:
+      "Todos los códigos de este evento ya fueron canjeados. Contacta al organizador.",
+    noVerifiedEmailTitle: "Verifica tu correo",
+    noVerifiedEmailBody:
+      "Tu cuenta necesita un correo verificado antes de canjear créditos.",
+    missingCodeTitle: "Falta el código",
+    missingCodeBody: "Abre el enlace completo que incluye ?code=…",
+    poolLabels: {
+      CURSOR: "Cursor",
+      CODEX: "Codex",
+      OPENAI: "OpenAI Platform",
     },
-    hero: {
-      h1: "Adáptate, desarrolla y aprende con IA",
-      sub: "Ai Labs ayuda a las empresas con formación, desarrollo de software y una comunidad real de builders. Con base en El Salvador — y más allá.",
-      primaryCta: { label: "Hablemos", href: "#contact" },
-      secondaryCta: { label: "Conoce los pilares", href: "#pillars" },
+    products: {
+      cursor: {
+        title: "Créditos de Cursor",
+        blurb: "Canjea tu código de Cursor de este evento de Ai Labs.",
+      },
+      codex: {
+        title: "Créditos de Codex",
+        blurb: "Canjea tu código de Codex de este evento de Ai Labs.",
+      },
+      openai: {
+        title: "Créditos de OpenAI Platform",
+        blurb:
+          "Canjea tu código de OpenAI Platform de este evento de Ai Labs.",
+      },
+      codexOpenai: {
+        title: "Créditos de Codex + OpenAI Platform",
+        blurb:
+          "Canjea tus códigos de Codex y OpenAI Platform de este evento.",
+      },
     },
-    proof: {
-      metrics: [
-        { value: "700+", label: "Builders" },
-        { value: "30+", label: "Eventos" },
-        { value: "8", label: "Partners" },
-      ],
-      partnersLine:
-        "Cursor, Codex, ElevenLabs, Notion, Devin, Mistral y más — con trabajo real de ambassadors y partners.",
-    },
-    pillars: {
-      sectionId: "pillars",
-      title: "Tres formas de trabajar con nosotros",
-      items: [
-        {
-          id: "academy",
-          name: "Academy",
-          title: "Aprende con nosotros",
-          body: "Consultorías, talleres, bootcamps y residencias para aprender IA en la práctica.",
-          cta: { label: "Ver Academy", href: "/academy" },
-        },
-        {
-          id: "agentic",
-          name: "Agentic",
-          title: "Construye con nosotros",
-          body: "Desarrollo de software bajo demanda — más flujos y automatización — con IA.",
-          cta: { label: "Ver Agentic", href: "/agentic" },
-        },
-        {
-          id: "aperture",
-          name: "Aperture",
-          title: "Conéctate con nosotros",
-          body: "Un hub de comunidad e innovación que conecta personas, perfiles con los que trabajamos y las empresas que representamos.",
-          cta: { label: "Ver Aperture", href: "/aperture" },
-        },
-      ],
-    },
-    community: {
-      title: "Sobre la comunidad",
-      body: "La comunidad no es un cuarto producto. Alimenta confianza, talento, eventos y relevancia con partners en Academy, Agentic y Aperture.",
-    },
-    founders: {
-      title: "Fundado por builders",
-      body: "Walter Morales y Daniela Lopez — ingenieros de software. Ambassadors y Regional Leads de herramientas que usamos de verdad.",
-      details: [
-        "Walter: Cursor Regional Lead; Codex, Devin, Mistral Ambassador.",
-        "Daniela: ElevenLabs Ambassador; Cursor Ambassador; Notion Builder.",
-      ],
-    },
-    brandBand: {
-      line: "IA práctica. Trabajo real. Personas reales.",
-      cta: { label: "Hablemos", href: "#contact" },
-    },
-  },
-  academy: {
-    meta: {
-      title: "Ai Labs Academy — Aprende IA en la práctica",
-      description:
-        "Consultorías, talleres, bootcamps y residencias de Ai Labs.",
-    },
-    hero: {
-      overline: "Ai Labs Academy",
-      h1: "Aprende IA usándola de verdad",
-      sub: "Consultorías, talleres, bootcamps y residencias para equipos, founders, estudiantes y personas buscando oportunidades.",
-      primaryCta: { label: "Forma a tu equipo", href: "#contact" },
-      secondaryCta: { label: "Hablemos", href: "#contact" },
-    },
-    whatYouGet: {
-      title: "Cómo es Academy",
-      items: [
-        "Consultorías y talleres para empresas y equipos",
-        "Bootcamps y residencias cuando el formato encaja",
-        "Formación práctica — no clases pasivas",
-      ],
-    },
-    programs: {
-      title: "Ejemplos de programas",
-      items: [
-        {
-          name: "Claude for Entrepreneurs",
-          blurb: "Intensivo de un día para founders y operadores.",
-        },
-        {
-          name: "Get Competitive Quick",
-          blurb:
-            "Experiencia de un día para estudiantes y personas buscando oportunidades fuera de El Salvador.",
-        },
-        {
-          name: "AI and Automation",
-          blurb: "Formación para empresas que quieren escalar operaciones.",
-        },
-      ],
-    },
-    whoItsFor:
-      "Empresas, sponsors, universidades y participantes — según quién financie el formato. En la sala: founders, operadores, estudiantes y builders.",
-    closingCta: {
-      line: "Lleva Academy a tu equipo.",
-      interest: "academy",
-      href: "#contact",
-    },
-  },
-  agentic: {
-    meta: {
-      title: "Ai Labs Agentic — Software y flujos con IA",
-      description:
-        "Desarrollo de software bajo demanda y automatización de flujos con Ai Labs.",
-    },
-    hero: {
-      overline: "Ai Labs Agentic",
-      h1: "Software bajo demanda, construido con IA",
-      sub: "Productos, herramientas internas y automatización de flujos para startups, empresas e inversores que necesitan pasar de idea a algo usable.",
-      primaryCta: { label: "Construyamos", href: "#contact" },
-      secondaryCta: { label: "Hablemos", href: "#contact" },
-    },
-    whatWeBuild: {
-      title: "Trabajo típico",
-      items: [
-        "Productos y MVPs",
-        "Herramientas internas",
-        "Automatización de flujos",
-        "Sistemas operativos / de operación",
-        "Iteración y partnership técnico",
-      ],
-    },
-    whoItsFor:
-      "Startups construyendo un producto. Empresas buscando un partner digital. Inversores con conceptos o MVPs para llevar más lejos.",
-    guardrails:
-      "No somos staff augmentation, y no vendemos \"agentes de IA\" como magia. El alcance queda claro antes de vender autonomía.",
-    closingCta: {
-      line: "Cuéntanos qué quieres lanzar.",
-      interest: "agentic",
-      href: "#contact",
-    },
-  },
-  aperture: {
-    meta: {
-      title: "Ai Labs Aperture — Hub de comunidad e innovación",
-      description:
-        "Conéctate con la comunidad, la red y las empresas partner de Ai Labs.",
-    },
-    hero: {
-      overline: "Ai Labs Aperture",
-      h1: "Conecta personas y empresas al ecosistema de IA a nuestro alrededor",
-      sub: "Un hub de comunidad e innovación: presentaciones, programas, eventos y canales con partners cuando son reales.",
-      primaryCta: { label: "Sé partner", href: "#contact" },
-      secondaryCta: { label: "Hablemos", href: "#contact" },
-    },
-    twoSides: {
-      title: "Personas y partners",
-      items: [
-        {
-          id: "people",
-          title: "Personas",
-          body: "Conecta participantes con otros perfiles de la red, y acércalos a las empresas que representamos o con las que hacemos partnership.",
-        },
-        {
-          id: "partners",
-          title: "Partners",
-          body: "Ayuda a sponsors, empresas e instituciones a participar en el ecosistema con programas, eventos, créditos cuando hay, e introducciones.",
-        },
-      ],
-    },
-    offers: {
-      title: "Qué ofrece Aperture",
-      items: [
-        "Dirección sobre cómo participar en el ecosistema",
-        "Acceso a la red de Ai Labs",
-        "Introducciones relevantes cuando corresponde",
-        "Programación y facilitación de comunidad",
-        "Créditos y oportunidades cuando hay",
-      ],
-    },
-    guardrail:
-      "Podemos prometer dirección, programación, facilitación e introducciones relevantes. No podemos prometer resultados controlados por terceros.",
-    closingCta: {
-      line: "Diseñemos cómo te conectas a la red.",
-      interest: "aperture",
-      href: "#contact",
-    },
-  },
-  microcopy: {
-    loading: "Cargando…",
-    notFoundTitle: "Página no encontrada",
-    notFoundBody: "Esa página no existe. Vuelve al inicio o háblanos.",
-    notFoundCtaHome: "Ir al inicio",
-    languageSwitch: "EN",
-    requiredField: "Obligatorio",
-    invalidEmail: "Ingresa un correo válido",
   },
 }

@@ -1,12 +1,22 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, getRouteApi } from "@tanstack/react-router"
 
-import { Section } from "@/components/section"
+import { HomeAbout } from "@/components/home/home-about"
+import { HomeContact } from "@/components/home/home-contact"
+import { HomeFeatures } from "@/components/home/home-features"
+import { HomeHero } from "@/components/home/home-hero"
+import { HomePartner } from "@/components/home/home-partner"
+import { HomeReveal } from "@/components/home/home-reveal"
+import { HomeTrust } from "@/components/home/home-trust"
+import { homeSectionGapClassName } from "@/components/home/home-styles"
 import { getContent, isLocale } from "@/content"
+import { cn } from "@/lib/utils"
+
+const localeRoute = getRouteApi("/$locale")
 
 export const Route = createFileRoute("/$locale/")({
   head: ({ params }) => {
     const locale = isLocale(params.locale) ? params.locale : "en"
-    const { meta } = getContent(locale).home
+    const { meta } = getContent(locale)
 
     return {
       meta: [
@@ -15,20 +25,36 @@ export const Route = createFileRoute("/$locale/")({
       ],
     }
   },
-  component: HomeStub,
+  component: HomePage,
 })
 
-function HomeStub() {
-  const { content } = Route.useRouteContext({ from: "/$locale" })
+function HomePage() {
+  const { locale, content } = localeRoute.useRouteContext()
+  const { home, chrome, microcopy } = content
 
   return (
-    <Section>
-      <h1 className="font-display text-3xl font-medium text-balance md:text-4xl">
-        {content.home.hero.h1}
-      </h1>
-      <p className="text-muted-foreground mt-4 max-w-2xl text-lg">
-        {content.home.hero.sub}
-      </p>
-    </Section>
+    <div className={cn(homeSectionGapClassName, "pb-4")}>
+      <HomeHero
+        locale={locale}
+        hero={home.hero}
+        chrome={chrome}
+        microcopy={microcopy}
+      />
+      <HomeReveal>
+        <HomeAbout about={home.about} />
+      </HomeReveal>
+      <HomeReveal>
+        <HomeFeatures locale={locale} features={home.features} />
+      </HomeReveal>
+      <HomeReveal>
+        <HomePartner partner={home.partner} />
+      </HomeReveal>
+      <HomeReveal>
+        <HomeTrust trust={home.trust} />
+      </HomeReveal>
+      <HomeReveal>
+        <HomeContact contact={home.contact} />
+      </HomeReveal>
+    </div>
   )
 }

@@ -35,153 +35,9 @@ export type FooterContent = {
   copyright: string
 }
 
-export type ContactInterestOption = {
-  value: PillarId
-  label: string
-}
-
-export type ContactFormContent = {
-  sectionId: "contact"
-  title: string
-  lead: string
-  nameLabel: string
-  emailLabel: string
-  companyLabel: string
-  interestLabel: string
-  interestOptions: ReadonlyArray<ContactInterestOption>
-  messageLabel: string
-  submit: string
-  submitting: string
-  success: string
-  error: string
-}
-
 export type ChromeContent = {
   nav: NavContent
   footer: FooterContent
-  contact: ContactFormContent
-}
-
-export type CtaLink = {
-  label: string
-  href: string
-}
-
-export type HomeHeroContent = {
-  h1: string
-  sub: string
-  primaryCta: CtaLink
-  secondaryCta: CtaLink
-}
-
-export type ProofMetric = {
-  value: string
-  label: string
-}
-
-export type ProofContent = {
-  metrics: ReadonlyArray<ProofMetric>
-  partnersLine: string
-}
-
-export type HomePillarCard = {
-  id: PillarId
-  name: string
-  title: string
-  body: string
-  cta: CtaLink
-}
-
-export type HomePillarsContent = {
-  sectionId: "pillars"
-  title: string
-  items: ReadonlyArray<HomePillarCard>
-}
-
-export type TextBlock = {
-  title: string
-  body: string
-}
-
-export type FoundersContent = TextBlock & {
-  details: ReadonlyArray<string>
-}
-
-export type BrandBandContent = {
-  line: string
-  cta: CtaLink
-}
-
-export type HomeContent = {
-  meta: PageMeta
-  hero: HomeHeroContent
-  proof: ProofContent
-  pillars: HomePillarsContent
-  community: TextBlock
-  founders: FoundersContent
-  brandBand: BrandBandContent
-}
-
-export type PillarHeroContent = {
-  overline: string
-  h1: string
-  sub: string
-  primaryCta: CtaLink
-  secondaryCta: CtaLink
-}
-
-export type ClosingCtaContent = {
-  line: string
-  interest: PillarId
-  href: string
-}
-
-export type AcademyContent = {
-  meta: PageMeta
-  hero: PillarHeroContent
-  whatYouGet: {
-    title: string
-    items: ReadonlyArray<string>
-  }
-  programs: {
-    title: string
-    items: ReadonlyArray<{ name: string; blurb: string }>
-  }
-  whoItsFor: string
-  closingCta: ClosingCtaContent
-}
-
-export type AgenticContent = {
-  meta: PageMeta
-  hero: PillarHeroContent
-  whatWeBuild: {
-    title: string
-    items: ReadonlyArray<string>
-  }
-  whoItsFor: string
-  guardrails: string
-  closingCta: ClosingCtaContent
-}
-
-export type ApertureSide = {
-  id: "people" | "partners"
-  title: string
-  body: string
-}
-
-export type ApertureContent = {
-  meta: PageMeta
-  hero: PillarHeroContent
-  twoSides: {
-    title: string
-    items: ReadonlyArray<ApertureSide>
-  }
-  offers: {
-    title: string
-    items: ReadonlyArray<string>
-  }
-  guardrail: string
-  closingCta: ClosingCtaContent
 }
 
 export type MicrocopyContent = {
@@ -190,16 +46,172 @@ export type MicrocopyContent = {
   notFoundBody: string
   notFoundCtaHome: string
   languageSwitch: string
-  requiredField: string
-  invalidEmail: string
+  skipToContent: string
+  menuOpen: string
+  menuClose: string
+  themeCycle: string
+  themeToLight: string
+  themeToDark: string
+  themeToSystem: string
+}
+
+export type RedeemProductCopy = {
+  title: string
+  blurb: string
+}
+
+export type RedeemContent = {
+  metaTitle: string
+  eventLabel: string
+  signInPrompt: string
+  signInCta: string
+  claimCta: string
+  claiming: string
+  signedInAs: string
+  yourCodes: string
+  alreadyRedeemed: string
+  copyCode: string
+  copied: string
+  invalidTitle: string
+  invalidBody: string
+  inactiveTitle: string
+  inactiveBody: string
+  notEligibleTitle: string
+  notEligibleBody: string
+  soldOutTitle: string
+  soldOutBody: string
+  noVerifiedEmailTitle: string
+  noVerifiedEmailBody: string
+  missingCodeTitle: string
+  missingCodeBody: string
+  poolLabels: {
+    CURSOR: string
+    CODEX: string
+    OPENAI: string
+  }
+  products: {
+    cursor: RedeemProductCopy
+    codex: RedeemProductCopy
+    openai: RedeemProductCopy
+    codexOpenai: RedeemProductCopy
+  }
+}
+
+export type HomeStat = {
+  value: string
+  label: string
+}
+
+export type HomeHeroContent = {
+  label: string
+  headline: string
+  body: string
+  primaryCta: NavItem
+  secondaryCta: NavItem
+  proof: HomeStat
+  slides: ReadonlyArray<HomeStat>
+  mediaSrc: string
+  mediaAlt: string
+}
+
+export type HomeAboutContent = {
+  label: string
+  body: string
+  stats: readonly [HomeStat, HomeStat]
+  bold: string
+  mediaSrc: string
+  mediaAlt: string
+  toastTitle: string
+  toastMeta: string
+}
+
+export type HomeAccordionItem = {
+  id: PillarId
+  title: string
+  subtitle: string
+  body: string
+}
+
+export type HomeFeatureCard = {
+  id: PillarId
+  title: string
+  body: string
+  cta: NavItem
+}
+
+export type HomeFeaturesContent = {
+  label: string
+  headline: string
+  cta: NavItem
+  showcaseImageSrc: string
+  showcaseImageAlt: string
+  accordion: ReadonlyArray<HomeAccordionItem>
+  cards: ReadonlyArray<HomeFeatureCard>
+}
+
+export type HomePartnerVoice = {
+  quote: string
+  role: string
+}
+
+export type HomePartnerMember = {
+  id: string
+  initial: string
+  imageSrc?: string
+  imageAlt?: string
+}
+
+export type HomePartnerContent = {
+  headline: string
+  lead: string
+  voices: ReadonlyArray<HomePartnerVoice>
+  members: ReadonlyArray<HomePartnerMember>
+}
+
+export type HomeTrustContent = {
+  label: string
+  headline: string
+  stat: HomeStat
+  quote: string
+  attribution: string
+  portraitSrc: string
+  portraitAlt: string
+}
+
+export type HomeContactInterest = {
+  value: PillarId
+  label: string
+}
+
+export type HomeContactContent = {
+  title: string
+  lead: string
+  nameLabel: string
+  emailLabel: string
+  companyLabel: string
+  interestLabel: string
+  interestOptions: ReadonlyArray<HomeContactInterest>
+  messageLabel: string
+  submit: string
+  submitting: string
+  success: string
+  error: string
+}
+
+export type HomeContent = {
+  hero: HomeHeroContent
+  about: HomeAboutContent
+  features: HomeFeaturesContent
+  partner: HomePartnerContent
+  trust: HomeTrustContent
+  contact: HomeContactContent
 }
 
 export type SiteContent = {
   locale: Locale
+  meta: PageMeta
   chrome: ChromeContent
-  home: HomeContent
-  academy: AcademyContent
-  agentic: AgenticContent
-  aperture: ApertureContent
   microcopy: MicrocopyContent
+  home: HomeContent
+  redeem: RedeemContent
 }

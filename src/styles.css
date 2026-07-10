@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "@clerk/ui/themes/shadcn.css";
 @import "@fontsource-variable/bricolage-grotesque";
 @import "@fontsource-variable/dm-sans";
 
@@ -50,6 +51,9 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
+    --color-surface-soft: var(--surface-soft);
+    --color-on-dark: var(--on-dark);
+    --color-on-dark-foreground: var(--on-dark-foreground);
 
     --radius-sm: 0.5rem;
     --radius-md: 0.75rem;
@@ -81,6 +85,10 @@
     --space-gutter: 1.5rem;
     --max-width: 72rem;
     --max-width-narrow: 45rem;
+    /* Site chrome — keep in sync with SiteHeader / MainCard */
+    --site-header-height: 4rem;
+    --main-card-margin-bottom: 0.5rem;
+    --main-card-min-height: calc(100dvh - var(--site-header-height));
 
     /* Motion */
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -122,47 +130,71 @@
     --sidebar-accent-foreground: var(--brand-graphite);
     --sidebar-border: var(--brand-border);
     --sidebar-ring: var(--brand-purple);
+
+    /* Soft tinted ground (lavender band, footer) */
+    --surface-soft: var(--brand-lavender);
+
+    /* Fixed contrast for controls sitting on dark bands */
+    --on-dark: var(--brand-white);
+    --on-dark-foreground: var(--brand-graphite);
+
+    /* Elevation — graphite/purple in light, black/purple in dark */
+    --shadow-color: color-mix(in srgb, var(--brand-graphite) 8%, transparent);
+    --shadow-color-strong: color-mix(in srgb, var(--brand-graphite) 12%, transparent);
+    --shadow-glow: color-mix(in srgb, var(--brand-purple) 32%, transparent);
+}
+
+@media (min-width: 640px) {
+    :root {
+        --main-card-margin-bottom: 0.75rem;
+    }
 }
 
 @media (min-width: 768px) {
     :root {
         --space-section-y: 6rem;
         --space-gutter: 2.5rem;
+        --site-header-height: 4.5rem;
     }
 }
 
 .dark {
     --background: var(--brand-graphite);
     --foreground: var(--brand-white);
-    --card: #3a3a3a;
+    --card: color-mix(in srgb, var(--brand-white) 8%, var(--brand-graphite));
     --card-foreground: var(--brand-white);
-    --popover: #3a3a3a;
+    --popover: color-mix(in srgb, var(--brand-white) 8%, var(--brand-graphite));
     --popover-foreground: var(--brand-white);
     --primary: var(--brand-purple);
     --primary-foreground: var(--brand-graphite);
     --secondary: transparent;
     --secondary-foreground: var(--brand-white);
-    --muted: #3a3a3a;
-    --muted-foreground: #b0b0b0;
-    --accent: #3a3a3a;
+    --muted: color-mix(in srgb, var(--brand-purple) 10%, var(--brand-graphite));
+    --muted-foreground: color-mix(in srgb, var(--brand-white) 68%, transparent);
+    --accent: color-mix(in srgb, var(--brand-purple) 14%, var(--brand-graphite));
     --accent-foreground: var(--brand-white);
-    --destructive: #f87171;
+    --destructive: color-mix(in srgb, #f87171 92%, white);
     --border: var(--brand-border-dark);
     --input: var(--brand-border-dark);
     --ring: var(--brand-purple-soft);
     --chart-1: var(--brand-purple);
     --chart-2: var(--brand-purple-soft);
-    --chart-3: #b0b0b0;
+    --chart-3: color-mix(in srgb, var(--brand-white) 68%, transparent);
     --chart-4: var(--brand-white);
     --chart-5: var(--brand-border);
-    --sidebar: #3a3a3a;
+    --sidebar: color-mix(in srgb, var(--brand-white) 8%, var(--brand-graphite));
     --sidebar-foreground: var(--brand-white);
     --sidebar-primary: var(--brand-purple);
     --sidebar-primary-foreground: var(--brand-graphite);
-    --sidebar-accent: #3a3a3a;
+    --sidebar-accent: color-mix(in srgb, var(--brand-purple) 14%, var(--brand-graphite));
     --sidebar-accent-foreground: var(--brand-white);
     --sidebar-border: var(--brand-border-dark);
     --sidebar-ring: var(--brand-purple-soft);
+
+    --surface-soft: color-mix(in srgb, var(--brand-purple) 14%, var(--brand-graphite));
+    --shadow-color: color-mix(in srgb, black 40%, transparent);
+    --shadow-color-strong: color-mix(in srgb, black 55%, transparent);
+    --shadow-glow: color-mix(in srgb, var(--brand-purple) 24%, transparent);
 }
 
 @layer base {
@@ -186,8 +218,9 @@
         font-family: var(--font-display);
     }
 
+    /* Legacy aliases → semantic tokens (prefer bg-surface-soft / text-foreground) */
     .bg-lavender {
-        background-color: var(--brand-lavender);
+        background-color: var(--surface-soft);
     }
 
     .bg-graphite {
@@ -195,11 +228,47 @@
     }
 
     .text-graphite {
-        color: var(--brand-graphite);
+        color: var(--foreground);
     }
 
     .text-muted-brand {
-        color: var(--brand-muted);
+        color: var(--muted-foreground);
+    }
+
+    .shadow-soft {
+        box-shadow: 0 1px 2px var(--shadow-color);
+    }
+
+    .shadow-lift {
+        box-shadow: 0 2px 6px var(--shadow-color-strong);
+    }
+
+    .shadow-soft-hover {
+        box-shadow: 0 2px 10px var(--shadow-color-strong);
+    }
+
+    .shadow-float {
+        box-shadow:
+            0 2px 6px var(--shadow-color-strong),
+            0 16px 40px var(--shadow-glow);
+    }
+
+    .shadow-float-lg {
+        box-shadow:
+            0 2px 6px var(--shadow-color-strong),
+            0 18px 44px var(--shadow-glow);
+    }
+
+    .shadow-elevated {
+        box-shadow:
+            0 1px 2px var(--shadow-color),
+            0 12px 32px -20px var(--shadow-glow);
+    }
+
+    .shadow-panel {
+        box-shadow:
+            0 2px 8px var(--shadow-color),
+            0 32px 80px -24px var(--shadow-glow);
     }
 
     .section-y {
@@ -216,6 +285,135 @@
 
     .max-w-narrow {
         max-width: var(--max-width-narrow);
+    }
+
+    .main-grid-dots {
+        background-image: radial-gradient(
+            color-mix(in srgb, var(--foreground) 22%, transparent) 1px,
+            transparent 1px
+        );
+        background-size: 16px 16px;
+    }
+
+    .main-grid-dots-glow {
+        opacity: 0.16;
+    }
+
+    /*
+     * Home hero left card — opposite of site theme.
+     * Light site → dark (graphite) tokens; dark site → light (white) tokens.
+     * Does not add `.dark` on the node so site-level `dark:` utilities still track html theme.
+     */
+    .home-hero-invert {
+        --background: var(--brand-graphite);
+        --foreground: var(--brand-white);
+        --card: color-mix(in srgb, var(--brand-white) 8%, var(--brand-graphite));
+        --card-foreground: var(--brand-white);
+        --popover: color-mix(in srgb, var(--brand-white) 8%, var(--brand-graphite));
+        --popover-foreground: var(--brand-white);
+        --secondary: transparent;
+        --secondary-foreground: var(--brand-white);
+        --muted: color-mix(in srgb, var(--brand-purple) 10%, var(--brand-graphite));
+        --muted-foreground: color-mix(in srgb, var(--brand-white) 68%, transparent);
+        --accent: color-mix(in srgb, var(--brand-purple) 14%, var(--brand-graphite));
+        --accent-foreground: var(--brand-white);
+        --border: var(--brand-border-dark);
+        --input: var(--brand-border-dark);
+        --ring: var(--brand-purple-soft);
+        --surface-soft: color-mix(in srgb, var(--brand-purple) 14%, var(--brand-graphite));
+        --shadow-color: color-mix(in srgb, black 40%, transparent);
+        --shadow-color-strong: color-mix(in srgb, black 55%, transparent);
+        --shadow-glow: color-mix(in srgb, var(--brand-purple) 24%, transparent);
+        color-scheme: dark;
+    }
+
+    .dark .home-hero-invert {
+        --background: var(--brand-white);
+        --foreground: var(--brand-graphite);
+        --card: var(--brand-white);
+        --card-foreground: var(--brand-graphite);
+        --popover: var(--brand-white);
+        --popover-foreground: var(--brand-graphite);
+        --secondary: var(--brand-white);
+        --secondary-foreground: var(--brand-graphite);
+        --muted: var(--brand-lavender);
+        --muted-foreground: var(--brand-muted);
+        --accent: var(--brand-lavender);
+        --accent-foreground: var(--brand-graphite);
+        --border: var(--brand-border);
+        --input: var(--brand-border);
+        --ring: var(--brand-purple);
+        --surface-soft: var(--brand-lavender);
+        --shadow-color: color-mix(in srgb, var(--brand-graphite) 8%, transparent);
+        --shadow-color-strong: color-mix(in srgb, var(--brand-graphite) 12%, transparent);
+        --shadow-glow: color-mix(in srgb, var(--brand-purple) 32%, transparent);
+        color-scheme: light;
+    }
+
+    /* Corner stipple — solid brand ink + higher peak alpha so dots read
+       on both inverted surfaces (dark card on light site, light card on dark). */
+    .home-hero-stipple-canvas {
+        color: var(--brand-white);
+        --stipple-opacity: 0.55;
+    }
+
+    .dark .home-hero-stipple-canvas {
+        color: var(--brand-purple);
+        --stipple-opacity: 0.5;
+    }
+
+    .home-partner-avatar,
+    .home-partner-voice {
+        opacity: 0;
+        transform: translateY(0.5rem);
+    }
+
+    .home-partner-constellation[data-revealed="true"] .home-partner-avatar,
+    .home-partner-constellation[data-revealed="true"] .home-partner-voice {
+        animation: home-partner-enter var(--dur-enter) var(--ease-out) both;
+        animation-delay: calc(var(--i, 0) * 28ms);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .home-partner-avatar,
+        .home-partner-voice {
+            opacity: 1;
+            transform: none;
+        }
+
+        .home-partner-constellation[data-revealed="true"] .home-partner-avatar,
+        .home-partner-constellation[data-revealed="true"] .home-partner-voice {
+            animation: none;
+        }
+    }
+}
+
+@keyframes home-partner-enter {
+    from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes main-grid-glow {
+    0%,
+    100% {
+        opacity: 0.12;
+    }
+
+    50% {
+        opacity: 0.34;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .main-grid-dots-glow {
+        animation: main-grid-glow 6s var(--ease-standard) infinite;
     }
 }
 
@@ -235,3 +433,4 @@
         transform: none !important;
     }
 }
+

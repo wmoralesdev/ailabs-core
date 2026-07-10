@@ -1,6 +1,7 @@
 import { en } from "./en"
 import { es } from "./es"
-import { LOCALES, type Locale, type SiteContent } from "./types"
+import { LOCALES   } from "./types"
+import type {Locale, SiteContent} from "./types";
 
 export { LOCALES, type Locale, type SiteContent }
 export type * from "./types"
@@ -32,11 +33,11 @@ export function localeFromAcceptLanguage(
     .split(",")
     .map((part) => {
       const [rawTag, ...params] = part.trim().split(";")
-      const tag = (rawTag ?? "").trim().toLowerCase()
+      const tag = rawTag.trim().toLowerCase()
       let q = 1
       for (const param of params) {
-        const [key, value] = param.trim().split("=")
-        if (key === "q" && value !== undefined) {
+        const [key, value = ""] = param.trim().split("=")
+        if (key === "q" && value.length > 0) {
           const parsed = Number.parseFloat(value)
           if (!Number.isNaN(parsed)) {
             q = parsed
