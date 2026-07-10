@@ -5,3 +5,8 @@ allowBuilds:
   lightningcss: true
   unrs-resolver: true
   msw: false
+  '@prisma/engines': true
+  prisma: true
+  bufferutil: true
+  core-js: true
+  utf-8-validate: true
