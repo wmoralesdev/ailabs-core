@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Product {
+  CURSOR
+  CODEX
+  OPENAI
+  CODEX_OPENAI
+}
+
+enum Pool {
+  CURSOR
+  CODEX
+  OPENAI
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  name      String
+  product   Product
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  eligibleEmails EligibleEmail[]
+  promoCodes     PromoCode[]
+  redemptions    Redemption[]
+}
+
+model EligibleEmail {
+  id      String @id @default(cuid())
+  eventId String
+  email   String
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, email])
+  @@index([eventId])
+}
+
+model Redemption {
+  id          String   @id @default(cuid())
+  eventId     String
+  email       String
+  clerkUserId String
+  createdAt   DateTime @default(now())
+
+  event      Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  promoCodes PromoCode[]
+
+  @@unique([eventId, email])
+  @@index([eventId])
+}
+
+model PromoCode {
+  id           String    @id @default(cuid())
+  eventId      String
+  pool         Pool
+  code         String
+  redemptionId String?
+  claimedAt    DateTime?
+
+  event      Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  redemption Redemption? @relation(fields: [redemptionId], references: [id], onDelete: SetNull)
+
+  @@unique([eventId, code])
+  @@index([eventId, pool, redemptionId])
+}
