@@ -26,6 +26,11 @@ const homeLabelClassName =
 const homeDisplayClassName =
   "font-display text-foreground text-4xl font-semibold tracking-tight uppercase sm:text-5xl md:text-6xl"
 
+const homeHeroNavLinkClassName =
+  "text-on-dark/85 hover:text-on-dark text-sm font-medium underline decoration-transparent decoration-2 underline-offset-8 hover:decoration-purple-soft motion-safe:transition-[color,text-decoration-color] motion-safe:duration-150 focus-visible:ring-ring/50 rounded-sm focus-visible:ring-2 focus-visible:outline-none"
+
+const homeHeroChromeHeightClassName = "h-14"
+
 export {
   homePillClassName,
   homePillOutlineClassName,
@@ -34,4 +39,6 @@ export {
   homeSectionGapClassName,
   homeLabelClassName,
   homeDisplayClassName,
+  homeHeroNavLinkClassName,
+  homeHeroChromeHeightClassName,
 }
