@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
+import {
+  ArrowRight01Icon,
+  Calendar03Icon,
+  HandshakeIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons"
 
 import type {
   ChromeContent,
   HomeHeroContent,
   HomeStat,
+  HomeStatIcon,
   Locale,
   MicrocopyContent,
 } from "@/content"
@@ -34,7 +40,13 @@ type HomeHeroProps = {
 }
 
 const SLIDE_INTERVAL_MS = 4500
-const SLIDE_TRANSITION_MS = 400
+const SLIDE_TRANSITION_MS = 500
+
+const SLIDE_ICONS: Record<HomeStatIcon, typeof UserGroupIcon> = {
+  builders: UserGroupIcon,
+  events: Calendar03Icon,
+  partners: HandshakeIcon,
+}
 
 const heroNavLinkClassName =
   "text-on-dark/85 hover:text-on-dark text-sm font-medium underline decoration-transparent decoration-2 underline-offset-8 hover:decoration-purple-soft motion-safe:transition-[color,text-decoration-color] motion-safe:duration-150 focus-visible:ring-ring/50 rounded-sm focus-visible:ring-2 focus-visible:outline-none"
@@ -105,15 +117,22 @@ function HomeHeroStatSlides({ slides }: { slides: ReadonlyArray<HomeStat> }) {
   const motionClassName = reducedMotion
     ? "opacity-100"
     : cn(
-        "transition-[transform,opacity] duration-400 ease-out",
-        phase === "enter" && "translate-x-8 opacity-0",
+        "transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
+        phase === "enter" && "translate-x-6 opacity-0",
         phase === "center" && "translate-x-0 opacity-100",
-        phase === "exit" && "-translate-x-8 opacity-0"
+        phase === "exit" && "-translate-x-6 opacity-0"
       )
+
+  const SlideIcon = slide.icon ? SLIDE_ICONS[slide.icon] : null
 
   return (
     <div
-      className="mx-auto w-full max-w-xs rounded-3xl border border-border/60 bg-card/95 p-5 shadow-elevated backdrop-blur-sm"
+      key={index}
+      className={cn(
+        "mx-auto flex w-full max-w-xs items-center gap-4 rounded-3xl border border-border/60 bg-card/95 p-5 shadow-elevated backdrop-blur-sm",
+        motionClassName
+      )}
+      aria-live="polite"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -123,23 +142,23 @@ function HomeHeroStatSlides({ slides }: { slides: ReadonlyArray<HomeStat> }) {
         }
       }}
     >
-      <div className="overflow-hidden">
-        <div
-          key={index}
-          className={cn("flex items-center gap-4", motionClassName)}
-          aria-live="polite"
-        >
-          <div
-            className="border-purple relative size-18 shrink-0 rounded-full border-4 border-t-transparent"
-            aria-hidden
+      <div
+        className="border-purple relative flex size-18 shrink-0 items-center justify-center rounded-full border-4"
+        aria-hidden
+      >
+        {SlideIcon ? (
+          <HugeiconsIcon
+            icon={SlideIcon}
+            className="text-purple size-8"
+            strokeWidth={2}
           />
-          <div>
-            <p className="font-display text-foreground text-2xl font-semibold tracking-tight">
-              {slide.value}
-            </p>
-            <p className="text-muted-foreground text-sm">{slide.label}</p>
-          </div>
-        </div>
+        ) : null}
+      </div>
+      <div>
+        <p className="font-display text-foreground text-2xl font-semibold tracking-tight">
+          {slide.value}
+        </p>
+        <p className="text-muted-foreground text-sm">{slide.label}</p>
       </div>
     </div>
   )
@@ -190,7 +209,10 @@ function HomeHero({ locale, hero, chrome, microcopy }: HomeHeroProps) {
               </Link>
               <a
                 href={hero.secondaryCta.href}
-                className={homePillOutlineClassName}
+                className={cn(
+                  homePillOutlineClassName,
+                  "bg-transparent dark:bg-transparent"
+                )}
               >
                 {hero.secondaryCta.label}
                 <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />

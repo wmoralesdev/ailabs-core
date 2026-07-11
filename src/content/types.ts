@@ -97,9 +97,12 @@ export type RedeemContent = {
   }
 }
 
+export type HomeStatIcon = "builders" | "events" | "partners"
+
 export type HomeStat = {
   value: string
   label: string
+  icon?: HomeStatIcon
 }
 
 export type HomeHeroContent = {
@@ -132,13 +135,6 @@ export type HomeAccordionItem = {
   body: string
 }
 
-export type HomeFeatureCard = {
-  id: PillarId
-  title: string
-  body: string
-  cta: NavItem
-}
-
 export type HomeFeaturesContent = {
   label: string
   headline: string
@@ -146,7 +142,6 @@ export type HomeFeaturesContent = {
   showcaseImageSrc: string
   showcaseImageAlt: string
   accordion: ReadonlyArray<HomeAccordionItem>
-  cards: ReadonlyArray<HomeFeatureCard>
 }
 
 export type HomePartnerVoice = {

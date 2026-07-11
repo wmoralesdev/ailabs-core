@@ -44,7 +44,7 @@ function HomePage() {
         <HomeAbout about={home.about} />
       </HomeReveal>
       <HomeReveal>
-        <HomeFeatures locale={locale} features={home.features} />
+        <HomeFeatures features={home.features} />
       </HomeReveal>
       <HomeReveal>
         <HomePartner partner={home.partner} />

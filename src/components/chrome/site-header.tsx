@@ -1,11 +1,5 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
-import {
-  Show,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/tanstack-react-start"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Cancel01Icon, Menu01Icon } from "@hugeicons/core-free-icons"
 
@@ -109,33 +103,6 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
           >
             {microcopy.languageSwitch}
           </Link>
-          <Show when="signed-out">
-            <SignInButton mode="modal">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hidden md:inline-flex"
-              >
-                Sign in
-              </Button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-              <Button
-                size="sm"
-                className={cn(
-                  "hidden md:inline-flex",
-                  "motion-safe:duration-150 motion-safe:hover:-translate-y-px motion-safe:hover:shadow-lift"
-                )}
-              >
-                Sign up
-              </Button>
-            </SignUpButton>
-          </Show>
-          <Show when="signed-in">
-            <div className="hidden items-center md:flex">
-              <UserButton />
-            </div>
-          </Show>
           <a
             href={chrome.nav.cta.href}
             className={cn(
@@ -196,23 +163,6 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
             >
               {chrome.nav.cta.label}
             </a>
-            <Show when="signed-out">
-              <div className="mt-2 flex flex-wrap gap-2">
-                <SignInButton mode="modal">
-                  <Button variant="outline" size="default">
-                    Sign in
-                  </Button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <Button size="default">Sign up</Button>
-                </SignUpButton>
-              </div>
-            </Show>
-            <Show when="signed-in">
-              <div className="mt-2">
-                <UserButton />
-              </div>
-            </Show>
           </div>
         </nav>
       ) : null}

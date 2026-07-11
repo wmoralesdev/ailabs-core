@@ -350,16 +350,16 @@
         color-scheme: light;
     }
 
-    /* Corner stipple — solid brand ink + higher peak alpha so dots read
-       on both inverted surfaces (dark card on light site, light card on dark). */
+    /* Corner stipple — solid brand ink; lower peak alpha keeps denser/larger
+       dots subtle on inverted surfaces. */
     .home-hero-stipple-canvas {
         color: var(--brand-white);
-        --stipple-opacity: 0.55;
+        --stipple-opacity: 0.28;
     }
 
     .dark .home-hero-stipple-canvas {
         color: var(--brand-purple);
-        --stipple-opacity: 0.5;
+        --stipple-opacity: 0.25;
     }
 
     .home-partner-avatar,

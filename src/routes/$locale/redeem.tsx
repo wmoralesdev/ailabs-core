@@ -5,24 +5,30 @@ import {
   UserButton,
   useUser,
 } from "@clerk/tanstack-react-start"
-import { createFileRoute } from "@tanstack/react-router"
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
 import { toast } from "sonner"
 
-import { MainCard } from "@/components/chrome/main-card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { SiteLogo } from "@/components/chrome/site-logo"
+import { ThemeToggle } from "@/components/chrome/theme-toggle"
+import { HomeHeroStipple } from "@/components/home/home-hero-stipple"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  homeCardClassName,
+  homeDisplayClassName,
+  homeLabelClassName,
+  homePillClassName,
+  homeShellClassName,
+} from "@/components/home/home-styles"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
-import { getContent, isLocale } from "@/content"
-import type { RedeemContent } from "@/content/types"
-import { getRedeemProductConfig } from "@/lib/redeem-products"
+import { LOCALES, getContent, isLocale } from "@/content"
+import type { Locale, MicrocopyContent, RedeemContent } from "@/content/types"
+import {
+  getRedeemProductConfig,
+  type RedeemProductConfig,
+} from "@/lib/redeem-products"
+import { cn } from "@/lib/utils"
 import {
   getEventByCode,
   redeemCredits,
@@ -72,41 +78,69 @@ export const Route = createFileRoute("/$locale/redeem")({
 })
 
 function RedeemPage() {
-  const { locale } = Route.useRouteContext()
+  const { locale, content: siteContent } = Route.useRouteContext()
   const { code } = Route.useSearch()
   const event = Route.useLoaderData()
-  const content = getContent(locale).redeem
+  const content = siteContent.redeem
+  const { microcopy } = siteContent
 
   if (!code) {
     return (
-      <RedeemShell>
-        <StatusCard
+      <RedeemHeroShell
+        locale={locale}
+        microcopy={microcopy}
+        productPanel={
+          <ProductStatusPanel
+            title={content.missingCodeTitle}
+            body={content.missingCodeBody}
+          />
+        }
+      >
+        <StatusPanel
           title={content.missingCodeTitle}
           body={content.missingCodeBody}
         />
-      </RedeemShell>
+      </RedeemHeroShell>
     )
   }
 
   if (!event) {
     return (
-      <RedeemShell>
-        <StatusCard
+      <RedeemHeroShell
+        locale={locale}
+        microcopy={microcopy}
+        productPanel={
+          <ProductStatusPanel
+            title={content.invalidTitle}
+            body={content.invalidBody}
+          />
+        }
+      >
+        <StatusPanel
           title={content.invalidTitle}
           body={content.invalidBody}
         />
-      </RedeemShell>
+      </RedeemHeroShell>
     )
   }
 
   if (!event.active) {
     return (
-      <RedeemShell>
-        <StatusCard
+      <RedeemHeroShell
+        locale={locale}
+        microcopy={microcopy}
+        productPanel={
+          <ProductStatusPanel
+            title={content.inactiveTitle}
+            body={content.inactiveBody}
+          />
+        }
+      >
+        <StatusPanel
           title={content.inactiveTitle}
           body={content.inactiveBody}
         />
-      </RedeemShell>
+      </RedeemHeroShell>
     )
   }
 
@@ -114,58 +148,219 @@ function RedeemPage() {
   const productCopy = content.products[product.titleKey]
 
   return (
-    <RedeemShell>
-      <Card className="mx-auto w-full max-w-lg text-sm">
-        <CardHeader className="gap-4">
-          <div className="flex flex-wrap items-center gap-3">
-            {product.logos.map((logo) => (
-              <span key={logo.alt} className="inline-flex items-center gap-2">
-                <img
-                  src={logo.light}
-                  alt={logo.alt}
-                  className="h-8 w-auto dark:hidden"
-                />
-                <img
-                  src={logo.dark}
-                  alt=""
-                  aria-hidden
-                  className="hidden h-8 w-auto dark:block"
-                />
-              </span>
-            ))}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Badge variant="secondary" className="w-fit">
-              {content.eventLabel}: {event.name}
-            </Badge>
-            <CardTitle className="font-display text-2xl font-semibold tracking-tight">
-              {productCopy.title}
-            </CardTitle>
-            <CardDescription className="text-base">
-              {productCopy.blurb}
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <Show when="signed-out">
-            <p className="text-muted-foreground">{content.signInPrompt}</p>
+    <RedeemHeroShell
+      locale={locale}
+      microcopy={microcopy}
+      productPanel={
+        <ProductPanel
+          event={event}
+          product={product}
+          productCopy={productCopy}
+          eventLabel={content.eventLabel}
+        />
+      }
+    >
+      <div className="flex max-w-xl flex-col gap-5 py-6 md:py-10">
+        <p className={homeLabelClassName}>{content.eventLabel}</p>
+        <h1 className={cn(homeDisplayClassName, "leading-[0.95]")}>
+          {productCopy.title}
+        </h1>
+        <p className="text-muted-foreground max-w-md text-base leading-relaxed md:text-lg">
+          {productCopy.blurb}
+        </p>
+
+        <Show when="signed-out">
+          <div className="flex flex-col gap-4">
+            <p className="text-muted-foreground max-w-md text-sm leading-relaxed md:text-base">
+              {content.signInPrompt}
+            </p>
             <SignInButton mode="modal">
-              <Button size="lg" className="w-full sm:w-auto">
+              <button type="button" className={cn(homePillClassName, "w-fit")}>
                 {content.signInCta}
-              </Button>
+                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+              </button>
             </SignInButton>
-          </Show>
-          <Show when="signed-in">
+          </div>
+        </Show>
+
+        <Show when="signed-in">
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <UserButton />
+            </div>
             <RedeemClaimPanel code={code} content={content} />
-          </Show>
-        </CardContent>
-        <CardFooter className="justify-end border-t pt-(--card-spacing)">
-          <Show when="signed-in">
-            <UserButton />
-          </Show>
-        </CardFooter>
-      </Card>
-    </RedeemShell>
+          </div>
+        </Show>
+      </div>
+    </RedeemHeroShell>
+  )
+}
+
+function RedeemHeroShell({
+  locale,
+  microcopy,
+  productPanel,
+  children,
+}: {
+  locale: Locale
+  microcopy: MicrocopyContent
+  productPanel: React.ReactNode
+  children: React.ReactNode
+}) {
+  const otherLocale =
+    LOCALES.find((candidate) => candidate !== locale) ?? locale
+
+  return (
+    <section
+      className={cn(
+        homeShellClassName,
+        "flex min-h-dvh flex-col pt-4 pb-10 md:pt-6 md:pb-14"
+      )}
+    >
+      <a
+        href="#redeem-main"
+        className="bg-background text-foreground focus-visible:ring-ring sr-only rounded-sm px-3 py-2 text-sm font-medium focus-visible:not-sr-only focus-visible:absolute focus-visible:top-2 focus-visible:left-2 focus-visible:z-50 focus-visible:ring-2"
+      >
+        {microcopy.skipToContent}
+      </a>
+
+      <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-2 lg:grid-rows-1 lg:gap-5">
+        <div
+          className={cn(
+            homeCardClassName,
+            "home-hero-invert bg-surface-soft relative flex h-auto min-h-0 flex-col p-6 sm:p-8 md:p-10 lg:h-full",
+            "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
+          )}
+        >
+          <HomeHeroStipple />
+          <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-between">
+            <div className="flex items-center justify-between gap-4">
+              <Link
+                to="/$locale"
+                params={{ locale }}
+                aria-label="Ai Labs"
+                className="focus-visible:ring-ring/50 rounded-sm focus-visible:ring-2 focus-visible:outline-none"
+              >
+                <SiteLogo variant="lockup" onDark className="dark:hidden" />
+                <SiteLogo
+                  variant="lockup"
+                  onLight
+                  className="hidden dark:block"
+                />
+              </Link>
+            </div>
+
+            <div id="redeem-main" className="flex min-h-0 flex-1 flex-col">
+              {children}
+            </div>
+          </div>
+        </div>
+
+        <div
+          className={cn(
+            homeCardClassName,
+            "bg-graphite relative flex h-auto min-h-[22rem] flex-col lg:h-full",
+            "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-100 motion-safe:duration-500"
+          )}
+        >
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-purple/30 via-graphite to-graphite"
+            aria-hidden
+          />
+          <div
+            className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168_85%_70%_/_0.22),transparent_55%)]"
+            aria-hidden
+          />
+
+          <div className="relative z-10 flex h-full flex-col justify-between p-6 sm:p-8 md:p-10">
+            <div className="flex items-center justify-end gap-1 [&_button]:text-on-dark [&_button]:hover:bg-on-dark/10 [&_button]:hover:text-on-dark">
+              <ThemeToggle
+                labels={{
+                  cycle: microcopy.themeCycle,
+                  toLight: microcopy.themeToLight,
+                  toDark: microcopy.themeToDark,
+                  toSystem: microcopy.themeToSystem,
+                }}
+              />
+              <Link
+                to="."
+                params={{ locale: otherLocale }}
+                search={(prev) => prev}
+                aria-label={microcopy.languageSwitch}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "text-on-dark hover:bg-on-dark/10 hover:text-on-dark text-xs font-semibold tracking-wider uppercase"
+                )}
+              >
+                {microcopy.languageSwitch}
+              </Link>
+            </div>
+
+            {productPanel}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function ProductPanel({
+  event,
+  product,
+  productCopy,
+  eventLabel,
+}: {
+  event: RedeemEventPublic
+  product: RedeemProductConfig
+  productCopy: { title: string; blurb: string }
+  eventLabel: string
+}) {
+  return (
+    <div className="mx-auto flex w-full max-w-sm flex-col items-center gap-6 rounded-3xl border border-on-dark/15 bg-on-dark/5 p-6 text-center shadow-elevated backdrop-blur-sm sm:p-8">
+      <div className="flex flex-wrap items-center justify-center gap-4">
+        {product.logos.map((logo) => (
+          <img
+            key={logo.alt}
+            src={logo.dark}
+            alt={logo.alt}
+            className="h-10 w-auto brightness-0 invert"
+          />
+        ))}
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-on-dark/70 text-xs font-semibold tracking-wider uppercase">
+          {eventLabel}
+        </p>
+        <p className="font-display text-on-dark text-2xl font-semibold tracking-tight">
+          {event.name}
+        </p>
+        <p className="text-on-dark/75 text-sm leading-relaxed">
+          {productCopy.blurb}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function ProductStatusPanel({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="mx-auto flex w-full max-w-sm flex-col gap-3 rounded-3xl border border-on-dark/15 bg-on-dark/5 p-6 text-center shadow-elevated backdrop-blur-sm sm:p-8">
+      <p className="font-display text-on-dark text-2xl font-semibold tracking-tight">
+        {title}
+      </p>
+      <p className="text-on-dark/75 text-sm leading-relaxed">{body}</p>
+    </div>
+  )
+}
+
+function StatusPanel({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="flex max-w-xl flex-col gap-4 py-10 md:py-14">
+      <h1 className={cn(homeDisplayClassName, "leading-[0.95]")}>{title}</h1>
+      <p className="text-muted-foreground max-w-md text-base leading-relaxed md:text-lg">
+        {body}
+      </p>
+    </div>
   )
 }
 
@@ -266,10 +461,9 @@ function RedeemClaimPanel({
           {content.signedInAs.replace("{email}", email)}
         </p>
       ) : null}
-      <p className="text-muted-foreground text-sm">{content.signInPrompt}</p>
-      <Button
-        size="lg"
-        className="w-full sm:w-auto"
+      <button
+        type="button"
+        className={cn(homePillClassName, "w-fit")}
         disabled={pending}
         onClick={() => void onClaim()}
       >
@@ -279,9 +473,12 @@ function RedeemClaimPanel({
             {content.claiming}
           </>
         ) : (
-          content.claimCta
+          <>
+            {content.claimCta}
+            <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+          </>
         )}
-      </Button>
+      </button>
     </div>
   )
 }
@@ -300,7 +497,7 @@ function CodesList({
         {codes.map((entry) => (
           <li
             key={`${entry.pool}-${entry.code}`}
-            className="bg-muted/40 flex flex-col gap-2 rounded-md p-3 sm:flex-row sm:items-center sm:justify-between"
+            className="bg-background/70 border-border/60 flex flex-col gap-2 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex min-w-0 flex-col gap-1">
               <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
@@ -336,29 +533,6 @@ function CopyButton({
     <Button variant="outline" size="sm" onClick={() => void onCopy()}>
       {copied ? content.copied : content.copyCode}
     </Button>
-  )
-}
-
-function RedeemShell({ children }: { children: React.ReactNode }) {
-  return (
-    <MainCard>
-      <section className="section-y page-gutter flex flex-1 items-start justify-center py-16">
-        {children}
-      </section>
-    </MainCard>
-  )
-}
-
-function StatusCard({ title, body }: { title: string; body: string }) {
-  return (
-    <Card className="mx-auto w-full max-w-lg">
-      <CardHeader>
-        <CardTitle className="font-display text-2xl font-semibold tracking-tight">
-          {title}
-        </CardTitle>
-        <CardDescription className="text-base">{body}</CardDescription>
-      </CardHeader>
-    </Card>
   )
 }
 

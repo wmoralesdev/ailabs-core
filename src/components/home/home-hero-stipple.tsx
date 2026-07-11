@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react"
 
-const GRID_STEP = 11
-const DOT_RADIUS = 1.15
+const GRID_STEP = 6
+const DOT_RADIUS = 2
 const MASK_INNER = 0.12
-const MASK_OUTER = 0.7
+const MASK_OUTER = 1.05
 const APPEAR_MS = 700
 const APPEAR_STAGGER_MS = 900
 const TWINKLE_FLOOR = 0.35
@@ -35,7 +35,7 @@ function HomeHeroStipple() {
     let dots: Dot[] = []
     let sprite: HTMLCanvasElement | null = null
     let spriteOffset = 0
-    let maxAlpha = 0.4
+    let maxAlpha = 0.28
     let dpr = 1
     let raf = 0
     let start = performance.now()
@@ -46,7 +46,7 @@ function HomeHeroStipple() {
       const opacity = Number.parseFloat(
         styles.getPropertyValue("--stipple-opacity")
       )
-      maxAlpha = Number.isFinite(opacity) ? opacity : 0.4
+      maxAlpha = Number.isFinite(opacity) ? opacity : 0.28
 
       const size = Math.ceil((DOT_RADIUS + 1) * 2 * dpr)
       const spriteCanvas = document.createElement("canvas")

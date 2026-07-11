@@ -46,9 +46,12 @@ export const Route = createFileRoute("/$locale")({
 
 function LocaleLayout() {
   const { locale, content } = Route.useRouteContext()
-  const isHome = useRouterState({
+  const hideChromeHeader = useRouterState({
     select: (state) =>
-      state.matches.some((match) => match.routeId === "/$locale/"),
+      state.matches.some(
+        (match) =>
+          match.routeId === "/$locale/" || match.routeId === "/$locale/redeem"
+      ),
   })
 
   useEffect(() => {
@@ -57,7 +60,7 @@ function LocaleLayout() {
 
   return (
     <div className={chromeShellClassName}>
-      {isHome ? null : (
+      {hideChromeHeader ? null : (
         <SiteHeader
           locale={locale}
           chrome={content.chrome}

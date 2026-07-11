@@ -1,16 +1,14 @@
 import { useState } from "react"
-import { Link } from "@tanstack/react-router"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
 
-import type { HomeFeaturesContent, Locale } from "@/content"
+import type { HomeFeaturesContent } from "@/content"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { isInternalHref, routeForHref } from "@/lib/locale-links"
 import { cn } from "@/lib/utils"
 import {
   homeCardClassName,
@@ -21,7 +19,6 @@ import {
 } from "@/components/home/home-styles"
 
 type HomeFeaturesProps = {
-  locale: Locale
   features: HomeFeaturesContent
 }
 
@@ -32,7 +29,7 @@ function canHover(): boolean {
   )
 }
 
-function HomeFeatures({ locale, features }: HomeFeaturesProps) {
+function HomeFeatures({ features }: HomeFeaturesProps) {
   const defaultOpen = features.accordion[0]?.id ?? "academy"
   const [openValue, setOpenValue] = useState<string[]>([defaultOpen])
 
@@ -98,56 +95,6 @@ function HomeFeatures({ locale, features }: HomeFeaturesProps) {
             ))}
           </Accordion>
         </div>
-      </div>
-
-      <div className="mt-5 grid gap-4 md:grid-cols-3 md:gap-5">
-        {features.cards.map((card) => {
-          const href = card.cta.href
-          const to = isInternalHref(href) ? routeForHref(href) : undefined
-
-          return (
-            <article
-              key={card.id}
-              className={cn(
-                homeCardClassName,
-                "bg-surface-soft flex min-h-72 flex-col justify-between p-6 sm:p-7"
-              )}
-            >
-              <div className="flex flex-col gap-3">
-                <h3 className="font-display text-foreground text-xl font-semibold tracking-tight">
-                  {card.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed md:text-base">
-                  {card.body}
-                </p>
-              </div>
-              <div className="mt-8 flex items-end justify-between gap-4">
-                <div
-                  className="bg-lavender/80 h-24 w-full max-w-[9rem] rounded-2xl"
-                  aria-hidden
-                />
-                {to ? (
-                  <Link
-                    to={to}
-                    params={{ locale }}
-                    className="text-foreground inline-flex items-center gap-1 text-sm font-medium underline-offset-4 hover:underline"
-                  >
-                    {card.cta.label}
-                    <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-                  </Link>
-                ) : (
-                  <a
-                    href={href}
-                    className="text-foreground inline-flex items-center gap-1 text-sm font-medium underline-offset-4 hover:underline"
-                  >
-                    {card.cta.label}
-                    <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-                  </a>
-                )}
-              </div>
-            </article>
-          )
-        })}
       </div>
     </section>
   )
