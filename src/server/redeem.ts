@@ -26,6 +26,15 @@ export type RedeemCreditsResult =
   | { status: "sold_out" }
   | { status: "no_verified_email" }
 
+export type RedeemStatusResult =
+  | { status: "eligible" }
+  | { status: "ok"; codes: RedeemedCode[]; alreadyRedeemed: true }
+  | { status: "unauthenticated" }
+  | { status: "invalid" }
+  | { status: "inactive" }
+  | { status: "not_eligible" }
+  | { status: "no_verified_email" }
+
 function codeInput(data: unknown): { code: string } {
   if (
     typeof data !== "object" ||
@@ -82,6 +91,75 @@ export const getEventByCode = createServerFn({ method: "GET" })
     })
 
     return event
+  })
+
+export const getRedeemStatus = createServerFn({ method: "GET" })
+  .validator(codeInput)
+  .handler(async ({ data }): Promise<RedeemStatusResult> => {
+    const { isAuthenticated, userId } = await auth()
+    if (!isAuthenticated || !userId) {
+      return { status: "unauthenticated" }
+    }
+
+    const event = await prisma.event.findUnique({
+      where: { id: data.code },
+      select: {
+        id: true,
+        active: true,
+      },
+    })
+
+    if (!event) {
+      return { status: "invalid" }
+    }
+
+    if (!event.active) {
+      return { status: "inactive" }
+    }
+
+    const email = await getVerifiedEmail(userId)
+    if (!email) {
+      return { status: "no_verified_email" }
+    }
+
+    const eligible = await prisma.eligibleEmail.findUnique({
+      where: {
+        eventId_email: {
+          eventId: event.id,
+          email,
+        },
+      },
+      select: { id: true },
+    })
+
+    if (!eligible) {
+      return { status: "not_eligible" }
+    }
+
+    const existing = await prisma.redemption.findUnique({
+      where: {
+        eventId_email: {
+          eventId: event.id,
+          email,
+        },
+      },
+      include: {
+        promoCodes: {
+          select: { pool: true, code: true },
+          orderBy: { pool: "asc" },
+        },
+      },
+    })
+
+    if (existing) {
+      return {
+        status: "ok",
+        codes: mapCodes(existing.promoCodes),
+        alreadyRedeemed: true,
+      }
+    }
+
+    return { status: "eligible" }
   })
 
 export const redeemCredits = createServerFn({ method: "POST" })
