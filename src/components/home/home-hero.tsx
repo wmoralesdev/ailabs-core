@@ -20,6 +20,7 @@ import { LOCALES } from "@/content"
 import { SiteLogo } from "@/components/chrome/site-logo"
 import { ThemeToggle } from "@/components/chrome/theme-toggle"
 import { HomeHeroStipple } from "@/components/home/home-hero-stipple"
+import { HomeMediaCarousel } from "@/components/home/home-media-carousel"
 import { buttonVariants } from "@/components/ui/button"
 import { routeForPillar } from "@/lib/locale-links"
 import { cn } from "@/lib/utils"
@@ -51,7 +52,7 @@ const SLIDE_ICONS: Record<HomeStatIcon, typeof UserGroupIcon> = {
 const heroNavLinkClassName =
   "text-on-dark/85 hover:text-on-dark text-sm font-medium underline decoration-transparent decoration-2 underline-offset-8 hover:decoration-purple-soft motion-safe:transition-[color,text-decoration-color] motion-safe:duration-150 focus-visible:ring-ring/50 rounded-sm focus-visible:ring-2 focus-visible:outline-none"
 
-type SlidePhase = "enter" | "center" | "exit"
+type SlidePhase = "center" | "exit"
 
 function HomeHeroStatSlides({ slides }: { slides: ReadonlyArray<HomeStat> }) {
   const [index, setIndex] = useState(0)
@@ -86,28 +87,11 @@ function HomeHeroStatSlides({ slides }: { slides: ReadonlyArray<HomeStat> }) {
 
     const id = window.setTimeout(() => {
       setIndex((current) => (current + 1) % slides.length)
-      setPhase("enter")
+      setPhase("center")
     }, SLIDE_TRANSITION_MS)
 
     return () => window.clearTimeout(id)
   }, [phase, reducedMotion, slides.length])
-
-  useEffect(() => {
-    if (phase !== "enter" || reducedMotion) {
-      return
-    }
-
-    let inner = 0
-    const outer = window.requestAnimationFrame(() => {
-      inner = window.requestAnimationFrame(() => {
-        setPhase("center")
-      })
-    })
-    return () => {
-      window.cancelAnimationFrame(outer)
-      window.cancelAnimationFrame(inner)
-    }
-  }, [phase, reducedMotion, index])
 
   const slide = slides[index]
   if (!slide) {
@@ -116,12 +100,9 @@ function HomeHeroStatSlides({ slides }: { slides: ReadonlyArray<HomeStat> }) {
 
   const motionClassName = reducedMotion
     ? "opacity-100"
-    : cn(
-        "transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
-        phase === "enter" && "translate-x-6 opacity-0",
-        phase === "center" && "translate-x-0 opacity-100",
-        phase === "exit" && "-translate-x-6 opacity-0"
-      )
+    : phase === "exit"
+      ? "transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] -translate-y-2 opacity-0"
+      : "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
 
   const SlideIcon = slide.icon ? SLIDE_ICONS[slide.icon] : null
 
@@ -271,10 +252,10 @@ function HomeHero({ locale, hero, chrome, microcopy }: HomeHeroProps) {
             "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-100 motion-safe:duration-500"
           )}
         >
-          <img
-            src={hero.mediaSrc}
+          <HomeMediaCarousel
+            images={hero.mediaSrcs}
             alt={hero.mediaAlt}
-            className="absolute inset-0 size-full object-cover"
+            intervalMs={4500}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-graphite/70 via-graphite/20 to-graphite/30" />
 

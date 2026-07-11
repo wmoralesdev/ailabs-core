@@ -1,4 +1,5 @@
 import { SiteLogo } from "@/components/chrome/site-logo"
+import { HomeMediaCarousel } from "@/components/home/home-media-carousel"
 import type { HomeTrustContent } from "@/content"
 import { cn } from "@/lib/utils"
 import {
@@ -65,10 +66,10 @@ function HomeTrust({ trust }: HomeTrustProps) {
         <article
           className={cn(homeCardClassName, "relative min-h-72 overflow-hidden")}
         >
-          <img
-            src={trust.portraitSrc}
+          <HomeMediaCarousel
+            images={trust.portraitSrcs}
             alt={trust.portraitAlt}
-            className="absolute inset-0 size-full object-cover"
+            intervalMs={6400}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-graphite/50 to-transparent" />
           <div className="relative z-10 p-5">

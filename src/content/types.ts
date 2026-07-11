@@ -60,14 +60,23 @@ export type RedeemProductCopy = {
   blurb: string
 }
 
+export type RedeemStep = {
+  title: string
+  body: string
+}
+
 export type RedeemContent = {
   metaTitle: string
   eventLabel: string
+  howItWorksLabel: string
+  steps: ReadonlyArray<RedeemStep>
+  poweredBy: string
   signInPrompt: string
   signInCta: string
   claimCta: string
   claiming: string
   signedInAs: string
+  signOutCta: string
   yourCodes: string
   alreadyRedeemed: string
   copyCode: string
@@ -113,7 +122,7 @@ export type HomeHeroContent = {
   secondaryCta: NavItem
   proof: HomeStat
   slides: ReadonlyArray<HomeStat>
-  mediaSrc: string
+  mediaSrcs: ReadonlyArray<string>
   mediaAlt: string
 }
 
@@ -122,7 +131,7 @@ export type HomeAboutContent = {
   body: string
   stats: readonly [HomeStat, HomeStat]
   bold: string
-  mediaSrc: string
+  mediaSrcs: ReadonlyArray<string>
   mediaAlt: string
   toastTitle: string
   toastMeta: string
@@ -139,7 +148,7 @@ export type HomeFeaturesContent = {
   label: string
   headline: string
   cta: NavItem
-  showcaseImageSrc: string
+  showcaseImageSrcs: ReadonlyArray<string>
   showcaseImageAlt: string
   accordion: ReadonlyArray<HomeAccordionItem>
 }
@@ -169,7 +178,7 @@ export type HomeTrustContent = {
   stat: HomeStat
   quote: string
   attribution: string
-  portraitSrc: string
+  portraitSrcs: ReadonlyArray<string>
   portraitAlt: string
 }
 

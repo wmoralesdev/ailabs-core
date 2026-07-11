@@ -1,3 +1,4 @@
+import { homeCarousel } from "./home-carousel"
 import type { SiteContent } from "./types"
 
 export const en: SiteContent = {
@@ -71,7 +72,7 @@ export const en: SiteContent = {
         { value: "30+", label: "Events hosted", icon: "events" },
         { value: "8", label: "Active partners", icon: "partners" },
       ],
-      mediaSrc: "/carousel/1.webp",
+      mediaSrcs: homeCarousel.hero,
       mediaAlt: "Ai Labs community session",
     },
     about: {
@@ -82,7 +83,7 @@ export const en: SiteContent = {
         { value: "8", label: "Active partners" },
       ],
       bold: "Adapt means your team can use the tools. Develop means something ships. Learn means practice sticks — not another deck about the future of AI.",
-      mediaSrc: "/carousel/2.webp",
+      mediaSrcs: homeCarousel.about,
       mediaAlt: "Builders collaborating at an Ai Labs event",
       toastTitle: "Session in progress",
       toastMeta: "El Salvador",
@@ -91,7 +92,7 @@ export const en: SiteContent = {
       label: "How we work",
       headline: "Three ways to work with us",
       cta: { label: "Talk to us", href: "#contact" },
-      showcaseImageSrc: "/carousel/3.webp",
+      showcaseImageSrcs: homeCarousel.features,
       showcaseImageAlt: "Hands-on workshop at Ai Labs",
       accordion: [
         {
@@ -196,7 +197,7 @@ export const en: SiteContent = {
       quote:
         "We combine practical learning, software work, and ecosystem access. Most alternatives only cover one of those.",
       attribution: "Ai Labs",
-      portraitSrc: "/carousel/5.webp",
+      portraitSrcs: homeCarousel.trust,
       portraitAlt: "Ai Labs community member at an event",
     },
     contact: {
@@ -221,12 +222,20 @@ export const en: SiteContent = {
   redeem: {
     metaTitle: "Redeem credits",
     eventLabel: "Event",
+    howItWorksLabel: "How it works",
+    steps: [
+      { title: "Sign in", body: "Use your event email" },
+      { title: "Get verified", body: "We check the guest list" },
+      { title: "Copy your code", body: "Redeem in seconds" },
+    ],
+    poweredBy: "An Ai Labs event",
     signInPrompt:
       "Sign in with the same email you used to register for this event.",
     signInCta: "Sign in to claim",
     claimCta: "Claim credits",
     claiming: "Claiming…",
     signedInAs: "Signed in as {email}",
+    signOutCta: "Sign out",
     yourCodes: "Your codes",
     alreadyRedeemed: "You already claimed these credits for this event.",
     copyCode: "Copy",

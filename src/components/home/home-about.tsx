@@ -2,6 +2,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { Globe02Icon } from "@hugeicons/core-free-icons"
 
 import type { HomeAboutContent } from "@/content"
+import { HomeMediaCarousel } from "@/components/home/home-media-carousel"
 import { cn } from "@/lib/utils"
 import {
   homeCardClassName,
@@ -49,10 +50,10 @@ function HomeAbout({ about }: HomeAboutProps) {
           "relative mt-10 aspect-[16/9] min-h-64 w-full md:mt-14 md:min-h-80"
         )}
       >
-        <img
-          src={about.mediaSrc}
+        <HomeMediaCarousel
+          images={about.mediaSrcs}
           alt={about.mediaAlt}
-          className="absolute inset-0 size-full object-cover"
+          intervalMs={5200}
         />
         <div className="absolute bottom-4 left-4 z-10 max-w-xs rounded-2xl border border-border/60 bg-card/95 px-4 py-3 shadow-elevated backdrop-blur-sm sm:bottom-6 sm:left-6">
           <p className="text-foreground text-sm font-semibold">{about.toastTitle}</p>

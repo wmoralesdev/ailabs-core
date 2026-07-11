@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
 
 import type { HomeFeaturesContent } from "@/content"
+import { HomeMediaCarousel } from "@/components/home/home-media-carousel"
 import {
   Accordion,
   AccordionContent,
@@ -57,10 +58,10 @@ function HomeFeatures({ features }: HomeFeaturesProps) {
         )}
       >
         <div className="relative min-h-72 lg:min-h-full">
-          <img
-            src={features.showcaseImageSrc}
+          <HomeMediaCarousel
+            images={features.showcaseImageSrcs}
             alt={features.showcaseImageAlt}
-            className="absolute inset-0 size-full object-cover"
+            intervalMs={5800}
           />
         </div>
         <div className="flex flex-col justify-center p-6 sm:p-8 md:p-10">

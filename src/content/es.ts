@@ -1,3 +1,4 @@
+import { homeCarousel } from "./home-carousel"
 import type { SiteContent } from "./types"
 
 export const es: SiteContent = {
@@ -71,7 +72,7 @@ export const es: SiteContent = {
         { value: "30+", label: "Eventos realizados", icon: "events" },
         { value: "8", label: "Partners activos", icon: "partners" },
       ],
-      mediaSrc: "/carousel/1.webp",
+      mediaSrcs: homeCarousel.hero,
       mediaAlt: "Sesión de comunidad de Ai Labs",
     },
     about: {
@@ -82,7 +83,7 @@ export const es: SiteContent = {
         { value: "8", label: "Partners activos" },
       ],
       bold: "Adaptarse es que tu equipo use las herramientas. Desarrollar es que algo se lance. Aprender es que la práctica quede — no otro deck sobre “el futuro de la IA.”",
-      mediaSrc: "/carousel/2.webp",
+      mediaSrcs: homeCarousel.about,
       mediaAlt: "Builders colaborando en un evento de Ai Labs",
       toastTitle: "Sesión en curso",
       toastMeta: "El Salvador",
@@ -91,7 +92,7 @@ export const es: SiteContent = {
       label: "Cómo trabajamos",
       headline: "Tres formas de trabajar con nosotros",
       cta: { label: "Hablemos", href: "#contact" },
-      showcaseImageSrc: "/carousel/3.webp",
+      showcaseImageSrcs: homeCarousel.features,
       showcaseImageAlt: "Taller práctico en Ai Labs",
       accordion: [
         {
@@ -196,7 +197,7 @@ export const es: SiteContent = {
       quote:
         "Combinamos aprendizaje práctico, trabajo de software y acceso al ecosistema. La mayoría de alternativas solo cubre una de esas partes.",
       attribution: "Ai Labs",
-      portraitSrc: "/carousel/5.webp",
+      portraitSrcs: homeCarousel.trust,
       portraitAlt: "Miembro de la comunidad Ai Labs en un evento",
     },
     contact: {
@@ -221,12 +222,20 @@ export const es: SiteContent = {
   redeem: {
     metaTitle: "Canjear créditos",
     eventLabel: "Evento",
+    howItWorksLabel: "Cómo funciona",
+    steps: [
+      { title: "Inicia sesión", body: "Usa el correo de tu evento" },
+      { title: "Verifícate", body: "Revisamos la lista de invitados" },
+      { title: "Copia tu código", body: "Canjea en segundos" },
+    ],
+    poweredBy: "Un evento de Ai Labs",
     signInPrompt:
       "Inicia sesión con el mismo correo con el que te registraste al evento.",
     signInCta: "Iniciar sesión para canjear",
     claimCta: "Canjear créditos",
     claiming: "Canjeando…",
     signedInAs: "Sesión iniciada como {email}",
+    signOutCta: "Cerrar sesión",
     yourCodes: "Tus códigos",
     alreadyRedeemed: "Ya canjeaste estos créditos para este evento.",
     copyCode: "Copiar",
