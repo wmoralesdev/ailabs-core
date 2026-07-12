@@ -22,7 +22,7 @@ import {
   homePillClassName,
   homeShellClassName,
 } from "@/components/home/home-styles"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import { LOCALES, getContent, isLocale } from "@/content"
 import type { Locale, MicrocopyContent, RedeemContent } from "@/content/types"
@@ -171,7 +171,6 @@ function RedeemPage() {
       microcopy={microcopy}
       mediaSrcs={mediaSrcs}
       mediaAlt={mediaAlt}
-      watermark={product.logos[0]?.dark}
       left={
         <ProductInfo
           content={content}
@@ -186,6 +185,11 @@ function RedeemPage() {
   )
 }
 
+const redeemFrostedPanelClassName = cn(
+  "rounded-3xl border border-on-dark/15 bg-black/55 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur-md sm:p-6",
+  "supports-backdrop-filter:bg-black/40"
+)
+
 function ProductInfo({
   content,
   product,
@@ -198,7 +202,7 @@ function ProductInfo({
   eventName: string
 }) {
   return (
-    <div className="flex max-w-xl flex-col gap-5">
+    <div className="flex w-full max-w-xl flex-col gap-5 lg:max-w-none">
       <div
         className={cn(
           revealBaseClassName,
@@ -237,10 +241,42 @@ function ProductInfo({
         <p className="font-display text-foreground text-lg font-semibold tracking-tight md:text-xl">
           {productCopy.title}
         </p>
-        <p className="text-muted-foreground max-w-md text-base leading-relaxed md:text-lg">
+        <p className="text-muted-foreground text-base leading-relaxed md:text-lg">
           {productCopy.blurb}
         </p>
       </div>
+    </div>
+  )
+}
+
+function RedeemAccountChrome({
+  content,
+  returnUrl,
+}: {
+  content: RedeemContent
+  returnUrl: string
+}) {
+  const { user } = useUser()
+  const email =
+    user?.primaryEmailAddress?.emailAddress ??
+    user?.emailAddresses[0]?.emailAddress
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <UserButton />
+      {email ? (
+        <p className="text-on-dark/70 min-w-0 flex-1 truncate text-sm">
+          {content.signedInAs.replace("{email}", email)}
+        </p>
+      ) : null}
+      <SignOutButton redirectUrl={returnUrl}>
+        <button
+          type="button"
+          className="text-on-dark/70 hover:text-on-dark focus-visible:ring-ring/50 shrink-0 rounded-sm text-sm font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:outline-none"
+        >
+          {content.signOutCta}
+        </button>
+      </SignOutButton>
     </div>
   )
 }
@@ -257,58 +293,43 @@ function RedeemAction({
   })
 
   return (
-    <div className="flex w-full max-w-md flex-col gap-6">
-      <Show when="signed-out">
-        <div
-          className={cn(
-            "flex flex-col gap-5",
-            revealBaseClassName,
-            "motion-safe:delay-150"
-          )}
-        >
-          <div className="flex flex-col gap-2">
-            <h2 className="font-display text-on-dark text-2xl font-semibold tracking-tight md:text-3xl">
-              {content.signInCta}
-            </h2>
-            <p className="text-on-dark/70 text-sm leading-relaxed md:text-base">
-              {content.signInPrompt}
-            </p>
-          </div>
-          <SignInButton
-            mode="modal"
-            forceRedirectUrl={returnUrl}
-            signUpForceRedirectUrl={returnUrl}
-          >
-            <button type="button" className={cn(homePillClassName, "w-fit")}>
-              {content.signInCta}
-              <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-            </button>
-          </SignInButton>
-        </div>
-      </Show>
-
-      <Show when="signed-in">
-        <div
-          className={cn(
-            "flex flex-col gap-5",
-            revealBaseClassName,
-            "motion-safe:delay-150"
-          )}
-        >
-          <div className="flex items-center justify-between gap-3">
-            <UserButton />
-            <SignOutButton redirectUrl={returnUrl}>
-              <button
-                type="button"
-                className="text-on-dark/70 hover:text-on-dark text-sm font-medium underline-offset-4 hover:underline"
-              >
-                {content.signOutCta}
+    <div className="flex w-full flex-col">
+      <div
+        className={cn(
+          redeemFrostedPanelClassName,
+          "flex w-full flex-col gap-5",
+          revealBaseClassName,
+          "motion-safe:delay-150"
+        )}
+      >
+        <Show when="signed-out">
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <h2 className="font-display text-on-dark text-2xl font-semibold tracking-tight md:text-3xl">
+                {content.signInCta}
+              </h2>
+              <p className="text-on-dark/70 text-sm leading-relaxed md:text-base">
+                {content.signInPrompt}
+              </p>
+            </div>
+            <SignInButton
+              mode="modal"
+              forceRedirectUrl={returnUrl}
+              signUpForceRedirectUrl={returnUrl}
+            >
+              <button type="button" className={cn(homePillClassName, "w-fit")}>
+                {content.signInCta}
+                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
               </button>
-            </SignOutButton>
+            </SignInButton>
           </div>
+        </Show>
+
+        <Show when="signed-in">
+          <RedeemAccountChrome content={content} returnUrl={returnUrl} />
           <RedeemClaimPanel code={code} content={content} onDark />
-        </div>
-      </Show>
+        </Show>
+      </div>
     </div>
   )
 }
@@ -350,7 +371,6 @@ function RedeemHeroShell({
   mediaAlt,
   left,
   right,
-  watermark,
   leftFooter,
 }: {
   locale: Locale
@@ -359,7 +379,6 @@ function RedeemHeroShell({
   mediaAlt: string
   left: React.ReactNode
   right: React.ReactNode
-  watermark?: string
   leftFooter?: React.ReactNode
 }) {
   const otherLocale =
@@ -429,14 +448,6 @@ function RedeemHeroShell({
             intervalMs={4500}
           />
           <div className="absolute inset-0 z-[2] bg-black/55" aria-hidden />
-          {watermark ? (
-            <img
-              src={watermark}
-              alt=""
-              aria-hidden
-              className="pointer-events-none absolute right-8 bottom-8 z-[3] w-16 opacity-[0.08] brightness-0 invert sm:w-20"
-            />
-          ) : null}
 
           <div className="relative z-10 flex h-full flex-col p-6 sm:p-8 md:p-10">
             <div className="[&_button]:text-on-dark [&_button]:hover:bg-on-dark/10 [&_button]:hover:text-on-dark flex items-center justify-end gap-1">
@@ -462,7 +473,7 @@ function RedeemHeroShell({
               </Link>
             </div>
 
-            <div className="flex flex-1 flex-col justify-center py-8">
+            <div className="flex min-h-0 flex-1 flex-col justify-end pt-8">
               {right}
             </div>
           </div>
@@ -487,7 +498,7 @@ function StatusPanel({ title, body }: { title: string; body: string }) {
 
 function RightStatus({ title, body }: { title: string; body: string }) {
   return (
-    <div className="flex max-w-md flex-col gap-3">
+    <div className="flex w-full flex-col gap-3">
       <h2 className="font-display text-on-dark text-2xl font-semibold tracking-tight md:text-3xl">
         {title}
       </h2>
@@ -525,13 +536,6 @@ function RedeemClaimPanel({
     RedeemCreditsResult | RedeemStatusResult | null
   >(null)
 
-  const email =
-    user?.primaryEmailAddress?.emailAddress ??
-    user?.emailAddresses[0]?.emailAddress
-
-  const mutedClassName = onDark
-    ? "text-on-dark/70"
-    : "text-muted-foreground"
   const bodyClassName = onDark ? "text-on-dark" : "text-foreground"
 
   useEffect(() => {
@@ -576,7 +580,9 @@ function RedeemClaimPanel({
       const next = await redeemCredits({ data: { code } })
       setResult(next)
       if (next.status === "ok" && !next.alreadyRedeemed) {
-        toast.success(content.yourCodes)
+        const heading =
+          next.codes.length === 1 ? content.yourCode : content.yourCodes
+        toast.success(heading)
       }
     } catch {
       toast.error(content.soldOutBody)
@@ -596,11 +602,6 @@ function RedeemClaimPanel({
   if (result?.status === "ok") {
     return (
       <div className="flex flex-col gap-4">
-        {email ? (
-          <p className={cn(mutedClassName, "text-sm")}>
-            {content.signedInAs.replace("{email}", email)}
-          </p>
-        ) : null}
         {result.alreadyRedeemed ? (
           <p className={cn(bodyClassName, "text-sm")}>
             {content.alreadyRedeemed}
@@ -613,35 +614,21 @@ function RedeemClaimPanel({
 
   if (result?.status === "not_eligible") {
     return (
-      <div className="flex flex-col gap-4">
-        {email ? (
-          <p className={cn(mutedClassName, "text-sm")}>
-            {content.signedInAs.replace("{email}", email)}
-          </p>
-        ) : null}
-        <StatusInline
-          title={content.notEligibleTitle}
-          body={content.notEligibleBody}
-          onDark={onDark}
-        />
-      </div>
+      <StatusInline
+        title={content.notEligibleTitle}
+        body={content.notEligibleBody}
+        onDark={onDark}
+      />
     )
   }
 
   if (result?.status === "sold_out") {
     return (
-      <div className="flex flex-col gap-4">
-        {email ? (
-          <p className={cn(mutedClassName, "text-sm")}>
-            {content.signedInAs.replace("{email}", email)}
-          </p>
-        ) : null}
-        <StatusInline
-          title={content.soldOutTitle}
-          body={content.soldOutBody}
-          onDark={onDark}
-        />
-      </div>
+      <StatusInline
+        title={content.soldOutTitle}
+        body={content.soldOutBody}
+        onDark={onDark}
+      />
     )
   }
 
@@ -679,11 +666,6 @@ function RedeemClaimPanel({
 
   return (
     <div className="flex flex-col gap-4">
-      {email ? (
-        <p className={cn(mutedClassName, "text-sm")}>
-          {content.signedInAs.replace("{email}", email)}
-        </p>
-      ) : null}
       <button
         type="button"
         className={cn(homePillClassName, "w-fit")}
@@ -715,28 +697,30 @@ function CodesList({
   content: RedeemContent
   onDark?: boolean
 }) {
+  const heading = codes.length === 1 ? content.yourCode : content.yourCodes
+
   return (
     <div className="flex flex-col gap-3">
       <h2
         className={cn(
-          "font-medium",
+          "font-display text-lg font-semibold tracking-tight",
           onDark ? "text-on-dark" : "text-foreground"
         )}
       >
-        {content.yourCodes}
+        {heading}
       </h2>
       <ul className="flex flex-col gap-2">
         {codes.map((entry) => (
           <li
             key={`${entry.pool}-${entry.code}`}
             className={cn(
-              "flex flex-col gap-2 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between",
+              "flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
               onDark
-                ? "border-on-dark/15 bg-on-dark/5"
+                ? "border-on-dark/15 bg-on-dark/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                 : "bg-background/70 border-border/60"
             )}
           >
-            <div className="flex min-w-0 flex-col gap-1">
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
               <span
                 className={cn(
                   "text-xs font-medium tracking-wide uppercase",
@@ -754,12 +738,54 @@ function CodesList({
                 {entry.code}
               </code>
             </div>
-            <CopyButton code={entry.code} content={content} />
+            <CodeAction code={entry.code} content={content} />
           </li>
         ))}
       </ul>
     </div>
   )
+}
+
+const codeActionClassName = cn(
+  homePillClassName,
+  "h-9 w-full shrink-0 px-4 text-xs sm:w-auto"
+)
+
+function getHttpUrl(value: string): string | null {
+  try {
+    const url = new URL(value.trim())
+    if (url.protocol === "http:" || url.protocol === "https:") {
+      return url.href
+    }
+    return null
+  } catch {
+    return null
+  }
+}
+
+function CodeAction({
+  code,
+  content,
+}: {
+  code: string
+  content: RedeemContent
+}) {
+  const href = getHttpUrl(code)
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={codeActionClassName}
+      >
+        {content.openCode}
+      </a>
+    )
+  }
+
+  return <CopyButton code={code} content={content} />
 }
 
 function CopyButton({
@@ -779,9 +805,13 @@ function CopyButton({
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={() => void onCopy()}>
+    <button
+      type="button"
+      className={codeActionClassName}
+      onClick={() => void onCopy()}
+    >
       {copied ? content.copied : content.copyCode}
-    </Button>
+    </button>
   )
 }
 
