@@ -77,10 +77,12 @@ export type RedeemContent = {
   claiming: string
   signedInAs: string
   signOutCta: string
+  yourCode: string
   yourCodes: string
   alreadyRedeemed: string
   copyCode: string
   copied: string
+  openCode: string
   invalidTitle: string
   invalidBody: string
   inactiveTitle: string
@@ -114,6 +116,13 @@ export type HomeStat = {
   icon?: HomeStatIcon
 }
 
+export type HomeHeroBuilder = {
+  name: string
+  initial: string
+  imageSrc?: string
+  imageAlt?: string
+}
+
 export type HomeHeroContent = {
   label: string
   headline: string
@@ -121,9 +130,15 @@ export type HomeHeroContent = {
   primaryCta: NavItem
   secondaryCta: NavItem
   proof: HomeStat
+  builders: ReadonlyArray<HomeHeroBuilder>
   slides: ReadonlyArray<HomeStat>
   mediaSrcs: ReadonlyArray<string>
   mediaAlt: string
+}
+
+export type HomeAboutBridgeItem = {
+  title: string
+  body: string
 }
 
 export type HomeAboutContent = {
@@ -131,30 +146,39 @@ export type HomeAboutContent = {
   body: string
   stats: readonly [HomeStat, HomeStat]
   bold: string
+  bridgeLabel: string
+  bridge: readonly [
+    HomeAboutBridgeItem,
+    HomeAboutBridgeItem,
+    HomeAboutBridgeItem,
+  ]
   mediaSrcs: ReadonlyArray<string>
   mediaAlt: string
   toastTitle: string
   toastMeta: string
 }
 
-export type HomeAccordionItem = {
-  id: PillarId
+export type HomePillarPoint = {
   title: string
-  subtitle: string
   body: string
 }
 
-export type HomeFeaturesContent = {
-  label: string
-  headline: string
+/** A standalone pillar section (Academy, Agentic). */
+export type HomePillarContent = {
+  id: Extract<PillarId, "academy" | "agentic">
+  index: string
+  eyebrow: string
+  title: string
+  lead: string
+  points: ReadonlyArray<HomePillarPoint>
   cta: NavItem
-  showcaseImageSrcs: ReadonlyArray<string>
-  showcaseImageAlt: string
-  accordion: ReadonlyArray<HomeAccordionItem>
+  mediaSrcs: ReadonlyArray<string>
+  mediaAlt: string
 }
 
 export type HomePartnerVoice = {
   quote: string
+  name: string
   role: string
 }
 
@@ -165,21 +189,19 @@ export type HomePartnerMember = {
   imageAlt?: string
 }
 
-export type HomePartnerContent = {
-  headline: string
+/** Aperture section — the funnel/community pillar (absorbs former Partner + Trust). */
+export type HomeApertureContent = {
+  id: "aperture"
+  index: string
+  eyebrow: string
+  title: string
   lead: string
-  voices: ReadonlyArray<HomePartnerVoice>
-  members: ReadonlyArray<HomePartnerMember>
-}
-
-export type HomeTrustContent = {
-  label: string
-  headline: string
   stat: HomeStat
   quote: string
   attribution: string
-  portraitSrcs: ReadonlyArray<string>
-  portraitAlt: string
+  voices: ReadonlyArray<HomePartnerVoice>
+  members: ReadonlyArray<HomePartnerMember>
+  cta: NavItem
 }
 
 export type HomeContactInterest = {
@@ -191,11 +213,15 @@ export type HomeContactContent = {
   title: string
   lead: string
   nameLabel: string
+  namePlaceholder: string
   emailLabel: string
+  emailPlaceholder: string
   companyLabel: string
+  companyPlaceholder: string
   interestLabel: string
   interestOptions: ReadonlyArray<HomeContactInterest>
   messageLabel: string
+  messagePlaceholder: string
   submit: string
   submitting: string
   success: string
@@ -205,9 +231,9 @@ export type HomeContactContent = {
 export type HomeContent = {
   hero: HomeHeroContent
   about: HomeAboutContent
-  features: HomeFeaturesContent
-  partner: HomePartnerContent
-  trust: HomeTrustContent
+  academy: HomePillarContent
+  agentic: HomePillarContent
+  aperture: HomeApertureContent
   contact: HomeContactContent
 }
 

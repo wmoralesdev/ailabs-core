@@ -1,12 +1,11 @@
 import { createFileRoute, getRouteApi } from "@tanstack/react-router"
 
 import { HomeAbout } from "@/components/home/home-about"
+import { HomeAperture } from "@/components/home/home-aperture"
 import { HomeContact } from "@/components/home/home-contact"
-import { HomeFeatures } from "@/components/home/home-features"
 import { HomeHero } from "@/components/home/home-hero"
-import { HomePartner } from "@/components/home/home-partner"
+import { HomePillar } from "@/components/home/home-pillar"
 import { HomeReveal } from "@/components/home/home-reveal"
-import { HomeTrust } from "@/components/home/home-trust"
 import { homeSectionGapClassName } from "@/components/home/home-styles"
 import { getContent, isLocale } from "@/content"
 import { cn } from "@/lib/utils"
@@ -40,17 +39,17 @@ function HomePage() {
         chrome={chrome}
         microcopy={microcopy}
       />
-      <HomeReveal>
+      <HomeReveal className="max-lg:mt-0 lg:-mt-14">
         <HomeAbout about={home.about} />
       </HomeReveal>
       <HomeReveal>
-        <HomeFeatures features={home.features} />
+        <HomePillar pillar={home.academy} mediaSide="right" intervalMs={5200} />
       </HomeReveal>
       <HomeReveal>
-        <HomePartner partner={home.partner} />
+        <HomePillar pillar={home.agentic} mediaSide="left" intervalMs={5800} />
       </HomeReveal>
       <HomeReveal>
-        <HomeTrust trust={home.trust} />
+        <HomeAperture aperture={home.aperture} />
       </HomeReveal>
       <HomeReveal>
         <HomeContact contact={home.contact} />

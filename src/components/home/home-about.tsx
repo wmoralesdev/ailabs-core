@@ -17,9 +17,9 @@ type HomeAboutProps = {
 function HomeAbout({ about }: HomeAboutProps) {
   return (
     <section id="about" className={cn(homeShellClassName, "scroll-mt-8")}>
-      <p className={cn(homeLabelClassName, "mb-6")}>{about.label}</p>
+      <p className={cn(homeLabelClassName, "mb-4 md:mb-6")}>{about.label}</p>
 
-      <div className="grid gap-8 lg:grid-cols-[0.4fr_0.6fr] lg:gap-12">
+      <div className="grid gap-8 lg:grid-cols-[0.4fr_0.6fr] lg:items-center lg:gap-12">
         <div className="flex flex-col gap-8">
           <div className="bg-lavender text-graphite inline-flex size-12 items-center justify-center rounded-full">
             <HugeiconsIcon icon={Globe02Icon} strokeWidth={2} className="size-5" />
@@ -39,9 +39,27 @@ function HomeAbout({ about }: HomeAboutProps) {
           </div>
         </div>
 
-        <p className="font-display text-foreground text-2xl font-semibold tracking-tight text-balance md:text-3xl lg:text-4xl lg:leading-snug">
-          {about.bold}
-        </p>
+        <div className="flex flex-col gap-8">
+          <p className="font-display text-foreground text-2xl font-semibold tracking-tight text-balance md:text-3xl lg:text-4xl lg:leading-snug">
+            {about.bold}
+          </p>
+
+          <div className="flex flex-col gap-3">
+            <p className={cn(homeLabelClassName)}>{about.bridgeLabel}</p>
+            <dl className="border-border grid gap-x-6 gap-y-3 border-t pt-4 sm:grid-cols-3">
+              {about.bridge.map((item) => (
+                <div key={item.title} className="flex flex-col gap-1">
+                  <dt className="text-foreground text-sm font-semibold">
+                    {item.title}
+                  </dt>
+                  <dd className="text-muted-foreground text-sm leading-relaxed">
+                    {item.body}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
       </div>
 
       <div
@@ -55,10 +73,6 @@ function HomeAbout({ about }: HomeAboutProps) {
           alt={about.mediaAlt}
           intervalMs={5200}
         />
-        <div className="absolute bottom-4 left-4 z-10 max-w-xs rounded-2xl border border-border/60 bg-card/95 px-4 py-3 shadow-elevated backdrop-blur-sm sm:bottom-6 sm:left-6">
-          <p className="text-foreground text-sm font-semibold">{about.toastTitle}</p>
-          <p className="text-muted-foreground text-xs">{about.toastMeta}</p>
-        </div>
       </div>
     </section>
   )

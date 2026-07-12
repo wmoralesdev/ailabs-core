@@ -15,8 +15,6 @@ import type {
 import { LOCALES } from "@/content"
 import { SiteLogo } from "@/components/chrome/site-logo"
 import { ThemeToggle } from "@/components/chrome/theme-toggle"
-import { HomeHeroStipple } from "@/components/home/home-hero-stipple"
-import { HomeHeroStatSlides } from "@/components/home/home-hero-stat-slides"
 import { HomeMediaCarousel } from "@/components/home/home-media-carousel"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
@@ -28,11 +26,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { routeForPillar } from "@/lib/locale-links"
+import { useScrolledPastHero } from "@/hooks/use-scrolled-past-hero"
 import { cn } from "@/lib/utils"
 import {
   homeDisplayClassName,
   homeHeroChromeHeightClassName,
-  homeLabelClassName,
   homePillClassName,
 } from "@/components/home/home-styles"
 
@@ -47,6 +45,9 @@ type HomeHeroMobileProps = {
 const sheetNavLinkClassName =
   "text-foreground hover:text-foreground/80 text-lg font-medium underline decoration-transparent decoration-2 underline-offset-8 hover:decoration-purple-soft motion-safe:transition-[color,text-decoration-color] motion-safe:duration-150 focus-visible:ring-ring/50 rounded-sm focus-visible:ring-2 focus-visible:outline-none"
 
+const heroLabelClassName =
+  "border-on-dark/25 bg-on-dark/10 text-on-dark inline-flex w-fit items-center rounded-full border px-3 py-1 text-xs font-semibold tracking-wider uppercase backdrop-blur-sm"
+
 function HomeHeroMobile({
   locale,
   hero,
@@ -55,6 +56,7 @@ function HomeHeroMobile({
   className,
 }: HomeHeroMobileProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const scrolled = useScrolledPastHero()
   const otherLocale =
     LOCALES.find((candidate) => candidate !== locale) ?? locale
 
@@ -72,16 +74,20 @@ function HomeHeroMobile({
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
         <header
           className={cn(
-            "fixed inset-x-0 top-0 z-40",
-            "border-border/40 bg-surface-soft/85 border-b backdrop-blur-md",
-            "shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]",
-            "pt-[env(safe-area-inset-top)]"
+            "fixed inset-x-0 top-0 z-40 pt-[env(safe-area-inset-top)]",
+            "motion-safe:transition-[background-color,border-color,backdrop-filter] motion-safe:duration-300",
+            scrolled
+              ? "border-border/40 bg-surface-soft/85 border-b shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur-md"
+              : "border-b border-transparent bg-transparent"
           )}
         >
           <div
             className={cn(
               homeHeroChromeHeightClassName,
-              "flex items-center justify-between gap-3 px-5"
+              "flex items-center justify-between gap-3 px-5",
+              scrolled
+                ? ""
+                : "[&_button]:text-on-dark [&_button]:hover:bg-on-dark/10 [&_button]:hover:text-on-dark"
             )}
           >
             <Link
@@ -90,7 +96,7 @@ function HomeHeroMobile({
               aria-label="Ai Labs"
               className="focus-visible:ring-ring/50 rounded-sm focus-visible:ring-2 focus-visible:outline-none"
             >
-              <SiteLogo variant="lockup" />
+              <SiteLogo variant="lockup" onDark={!scrolled} className="h-5 w-auto" />
             </Link>
 
             <div className="flex shrink-0 items-center gap-1">
@@ -108,7 +114,10 @@ function HomeHeroMobile({
                 aria-label={microcopy.languageSwitch}
                 className={cn(
                   buttonVariants({ variant: "ghost", size: "sm" }),
-                  "text-xs font-semibold tracking-wider uppercase"
+                  "text-xs font-semibold tracking-wider uppercase",
+                  scrolled
+                    ? ""
+                    : "text-on-dark hover:bg-on-dark/10 hover:text-on-dark"
                 )}
               >
                 {microcopy.languageSwitch}
@@ -130,7 +139,10 @@ function HomeHeroMobile({
           </div>
         </header>
 
-        <SheetContent side="right" className="gap-0 p-0 sm:max-w-sm">
+        <SheetContent
+          side="right"
+          className="gap-0 p-0 data-[side=right]:w-full data-[side=right]:max-w-full sm:data-[side=right]:max-w-full"
+        >
           <SheetHeader className="border-border border-b px-6 py-5">
             <SheetTitle className="font-display text-base font-semibold tracking-tight uppercase">
               Ai Labs
@@ -175,23 +187,26 @@ function HomeHeroMobile({
       </Sheet>
 
       <section
-        className={cn(
-          "home-hero-invert bg-surface-soft relative flex w-full flex-col",
-          "min-h-[100dvh]"
-        )}
+        className="bg-graphite relative w-full min-h-[100dvh]"
+        aria-label={hero.mediaAlt}
       >
-        <HomeHeroStipple />
+        <HomeMediaCarousel
+          images={hero.mediaSrcs}
+          alt={hero.mediaAlt}
+          intervalMs={4500}
+        />
+        <div className="from-graphite via-graphite/60 to-graphite/25 absolute inset-0 z-1 bg-gradient-to-t" />
 
         <div
           className={cn(
-            "relative z-10 flex min-h-[100dvh] flex-1 flex-col justify-between px-5 pb-8",
-            "pt-[calc(env(safe-area-inset-top)+3.5rem)]"
+            "relative z-10 flex min-h-[100dvh] flex-col justify-end gap-8 px-5 pb-12",
+            "pt-[calc(env(safe-area-inset-top)+4.5rem)]"
           )}
         >
-          <div className="flex max-w-xl flex-col gap-5 pt-8">
+          <div className="flex max-w-xl flex-col gap-5">
             <p
               className={cn(
-                homeLabelClassName,
+                heroLabelClassName,
                 "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
               )}
             >
@@ -200,7 +215,7 @@ function HomeHeroMobile({
             <h1
               className={cn(
                 homeDisplayClassName,
-                "leading-[0.95]",
+                "text-on-dark leading-[0.95]",
                 "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-75 motion-safe:duration-500"
               )}
             >
@@ -208,28 +223,35 @@ function HomeHeroMobile({
             </h1>
             <p
               className={cn(
-                "text-muted-foreground max-w-md text-base leading-relaxed",
+                "text-on-dark/80 max-w-md text-base leading-relaxed",
                 "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-150 motion-safe:duration-500"
               )}
             >
               {hero.body}
             </p>
-            <a
-              href={hero.primaryCta.href}
+            <div
               className={cn(
-                homePillClassName,
-                "w-fit",
+                "flex flex-wrap items-center gap-3",
                 "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-200 motion-safe:duration-500"
               )}
             >
-              {hero.primaryCta.label}
-              <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-            </a>
+              <a href={hero.primaryCta.href} className={cn(homePillClassName, "w-fit")}>
+                {hero.primaryCta.label}
+                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+              </a>
+              <a
+                href={hero.secondaryCta.href}
+                className="border-on-dark/30 text-on-dark hover:bg-on-dark/10 inline-flex h-11 w-fit items-center gap-2 rounded-full border bg-transparent px-5 text-sm font-medium backdrop-blur-sm motion-safe:transition-colors motion-safe:duration-150"
+              >
+                {hero.secondaryCta.label}
+                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+              </a>
+            </div>
           </div>
 
           <div
             className={cn(
-              "flex items-center gap-4 pt-10",
+              "flex items-center gap-4",
               "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-300 motion-safe:duration-500"
             )}
           >
@@ -237,34 +259,19 @@ function HomeHeroMobile({
               {["A", "L", "S"].map((initial) => (
                 <span
                   key={initial}
-                  className="border-background bg-lavender text-graphite inline-flex size-11 items-center justify-center rounded-full border-2 text-sm font-semibold"
+                  className="border-graphite bg-lavender text-graphite inline-flex size-11 items-center justify-center rounded-full border-2 text-sm font-semibold"
                 >
                   {initial}
                 </span>
               ))}
             </div>
             <div>
-              <p className="font-display text-foreground text-2xl font-semibold tracking-tight">
+              <p className="font-display text-on-dark text-2xl font-semibold tracking-tight">
                 {hero.proof.value}
               </p>
-              <p className="text-muted-foreground text-sm">{hero.proof.label}</p>
+              <p className="text-on-dark/70 text-sm">{hero.proof.label}</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section
-        className="bg-graphite relative min-h-[55dvh] w-full"
-        aria-label={hero.mediaAlt}
-      >
-        <HomeMediaCarousel
-          images={hero.mediaSrcs}
-          alt={hero.mediaAlt}
-          intervalMs={4500}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-graphite/75 via-graphite/25 to-graphite/35" />
-        <div className="relative z-10 flex min-h-[55dvh] items-end justify-center p-6 pb-10">
-          <HomeHeroStatSlides slides={hero.slides} />
         </div>
       </section>
     </div>

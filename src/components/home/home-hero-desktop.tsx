@@ -12,7 +12,6 @@ import { LOCALES } from "@/content"
 import { SiteLogo } from "@/components/chrome/site-logo"
 import { ThemeToggle } from "@/components/chrome/theme-toggle"
 import { HomeHeroStipple } from "@/components/home/home-hero-stipple"
-import { HomeHeroStatSlides } from "@/components/home/home-hero-stat-slides"
 import { HomeMediaCarousel } from "@/components/home/home-media-carousel"
 import { buttonVariants } from "@/components/ui/button"
 import { routeForPillar } from "@/lib/locale-links"
@@ -23,7 +22,6 @@ import {
   homeHeroNavLinkClassName,
   homeLabelClassName,
   homePillClassName,
-  homePillOutlineClassName,
   homeShellClassName,
 } from "@/components/home/home-styles"
 
@@ -85,16 +83,6 @@ function HomeHeroDesktop({
                   className="hidden dark:block"
                 />
               </Link>
-              <a
-                href={hero.secondaryCta.href}
-                className={cn(
-                  homePillOutlineClassName,
-                  "bg-transparent dark:bg-transparent"
-                )}
-              >
-                {hero.secondaryCta.label}
-                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-              </a>
             </div>
 
             <div className="flex max-w-xl flex-col gap-5 py-10 md:py-14">
@@ -117,12 +105,20 @@ function HomeHeroDesktop({
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2" aria-hidden>
-                  {["A", "L", "S"].map((initial) => (
+                  {hero.builders.map((builder) => (
                     <span
-                      key={initial}
-                      className="border-background bg-lavender text-graphite inline-flex size-12 items-center justify-center rounded-full border-2 text-sm font-semibold"
+                      key={builder.name}
+                      className="border-background bg-lavender text-graphite inline-flex size-12 items-center justify-center overflow-hidden rounded-full border-2 text-sm font-semibold"
                     >
-                      {initial}
+                      {builder.imageSrc ? (
+                        <img
+                          src={builder.imageSrc}
+                          alt=""
+                          className="size-full object-cover"
+                        />
+                      ) : (
+                        builder.initial
+                      )}
                     </span>
                   ))}
                 </div>
@@ -154,9 +150,17 @@ function HomeHeroDesktop({
             alt={hero.mediaAlt}
             intervalMs={4500}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-graphite/70 via-graphite/20 to-graphite/30" />
+          {/* Above carousel (z-1), below nav/stats (z-10) */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-graphite/70 via-graphite/20 to-transparent"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(to_bottom,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.2)_22%,transparent_45%)]"
+          />
 
-          <div className="relative z-10 flex h-full flex-col justify-between p-6 sm:p-8 md:p-10">
+          <div className="relative z-10 flex h-full flex-col p-6 sm:p-8 md:p-10">
             <div className="flex items-center justify-between gap-4">
               <nav
                 aria-label="Pillars"
@@ -196,8 +200,6 @@ function HomeHeroDesktop({
                 </Link>
               </div>
             </div>
-
-            <HomeHeroStatSlides slides={hero.slides} />
           </div>
         </div>
       </div>

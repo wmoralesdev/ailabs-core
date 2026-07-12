@@ -19,6 +19,14 @@ type HomeContactProps = {
 
 type FormStatus = "idle" | "submitting" | "success" | "error"
 
+const fieldClassName =
+  "h-11 rounded-xl border-border bg-background text-sm shadow-none md:text-sm"
+
+const textareaClassName =
+  "min-h-28 rounded-xl border-border bg-background text-sm shadow-none md:text-sm"
+
+const labelClassName = "text-sm font-medium text-foreground"
+
 function HomeContact({ contact }: HomeContactProps) {
   const [status, setStatus] = useState<FormStatus>("idle")
   const [interest, setInterest] = useState<PillarId>(
@@ -46,53 +54,70 @@ function HomeContact({ contact }: HomeContactProps) {
       <div
         className={cn(
           homeCardClassName,
-          "bg-surface-soft mx-auto max-w-3xl p-6 sm:p-8 md:p-10"
+          "grid w-full gap-8 p-6 sm:p-8 md:gap-10 md:p-10",
+          "lg:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)] lg:items-start lg:gap-14"
         )}
       >
-        <h2 className={cn(homeDisplayClassName, "text-3xl normal-case sm:text-4xl")}>
-          {contact.title}
-        </h2>
-        <p className="text-muted-foreground mt-3 max-w-prose text-base leading-relaxed">
-          {contact.lead}
-        </p>
+        <div className="flex max-w-md flex-col gap-3 lg:sticky lg:top-24">
+          <h2
+            className={cn(
+              homeDisplayClassName,
+              "text-3xl normal-case sm:text-4xl md:text-5xl"
+            )}
+          >
+            {contact.title}
+          </h2>
+          <p className="text-muted-foreground text-base leading-relaxed md:text-lg">
+            {contact.lead}
+          </p>
+        </div>
 
-        <form className="mt-8 flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
-              <Label htmlFor="contact-name">{contact.nameLabel}</Label>
+              <Label htmlFor="contact-name" className={labelClassName}>
+                {contact.nameLabel}
+              </Label>
               <Input
                 id="contact-name"
                 name="name"
                 required
                 autoComplete="name"
-                className="h-10 rounded-xl"
+                placeholder={contact.namePlaceholder}
+                className={fieldClassName}
               />
             </div>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="contact-email">{contact.emailLabel}</Label>
+              <Label htmlFor="contact-email" className={labelClassName}>
+                {contact.emailLabel}
+              </Label>
               <Input
                 id="contact-email"
                 name="email"
                 type="email"
                 required
                 autoComplete="email"
-                className="h-10 rounded-xl"
+                placeholder={contact.emailPlaceholder}
+                className={fieldClassName}
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="contact-company">{contact.companyLabel}</Label>
+            <Label htmlFor="contact-company" className={labelClassName}>
+              {contact.companyLabel}
+            </Label>
             <Input
               id="contact-company"
               name="company"
               autoComplete="organization"
-              className="h-10 rounded-xl"
+              placeholder={contact.companyPlaceholder}
+              className={fieldClassName}
             />
           </div>
 
           <fieldset className="flex flex-col gap-3">
-            <legend className="text-sm font-medium">{contact.interestLabel}</legend>
+            <legend className={labelClassName}>{contact.interestLabel}</legend>
             <div className="flex flex-wrap gap-2">
               {contact.interestOptions.map((option) => (
                 <label
@@ -100,8 +125,8 @@ function HomeContact({ contact }: HomeContactProps) {
                   className={cn(
                     "cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors",
                     interest === option.value
-                      ? "border-purple bg-lavender text-graphite"
-                      : "border-border bg-background text-muted-foreground hover:text-foreground"
+                      ? "border-purple bg-background text-graphite"
+                      : "border-border bg-background/70 text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <input
@@ -120,13 +145,16 @@ function HomeContact({ contact }: HomeContactProps) {
           </fieldset>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="contact-message">{contact.messageLabel}</Label>
+            <Label htmlFor="contact-message" className={labelClassName}>
+              {contact.messageLabel}
+            </Label>
             <Textarea
               id="contact-message"
               name="message"
               required
               rows={4}
-              className="min-h-28 rounded-xl"
+              placeholder={contact.messagePlaceholder}
+              className={textareaClassName}
             />
           </div>
 

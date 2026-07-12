@@ -70,7 +70,7 @@
 }
 
 :root {
-    /* Brand color contract (STYLES.md) */
+    /* Brand color contract; durable guidance lives in AGENTS.md. */
     --brand-purple: #a78bfa;
     --brand-purple-soft: #c4acf6;
     --brand-lavender: #ede4ff;
@@ -368,10 +368,44 @@
         transform: translateY(0.5rem);
     }
 
+    .home-partner-avatar {
+        touch-action: none;
+        user-select: none;
+    }
+
     .home-partner-constellation[data-revealed="true"] .home-partner-avatar,
     .home-partner-constellation[data-revealed="true"] .home-partner-voice {
         animation: home-partner-enter var(--dur-enter) var(--ease-out) both;
         animation-delay: calc(var(--i, 0) * 28ms);
+    }
+
+    /* Perpetual bob after enter — transform only; staggered via --i */
+    .home-partner-constellation[data-revealed="true"] .home-partner-avatar {
+        animation:
+            home-partner-enter var(--dur-enter) var(--ease-out) both,
+            home-partner-float 4.8s ease-in-out infinite;
+        animation-delay:
+            calc(var(--i, 0) * 28ms),
+            calc(var(--dur-enter) + var(--i, 0) * 190ms);
+    }
+
+    /* Pause bob while dragging so left/top tracking stays under the pointer */
+    .home-partner-constellation[data-revealed="true"]
+        .home-partner-avatar[data-dragging="true"] {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Inner face scales independently so float animation is not overwritten */
+    .home-partner-avatar-face {
+        transform: scale(1);
+        transition: transform 480ms cubic-bezier(0.34, 1.45, 0.64, 1);
+        will-change: transform;
+    }
+
+    .home-partner-avatar-face[data-enlarged="true"] {
+        transform: scale(1.55);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -385,6 +419,10 @@
         .home-partner-constellation[data-revealed="true"] .home-partner-voice {
             animation: none;
         }
+
+        .home-partner-avatar-face {
+            transition: none;
+        }
     }
 }
 
@@ -397,6 +435,17 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes home-partner-float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-0.35rem);
     }
 }
 
@@ -433,4 +482,3 @@
         transform: none !important;
     }
 }
-
