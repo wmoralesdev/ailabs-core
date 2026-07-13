@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import {
   Link,
   Outlet,
@@ -11,6 +10,7 @@ import { SiteFooter } from "@/components/chrome/site-footer"
 import { SiteHeader } from "@/components/chrome/site-header"
 import { MainCard } from "@/components/chrome/main-card"
 import { getContent, isLocale } from "@/content"
+import type { Locale, MicrocopyContent } from "@/content"
 
 const chromeShellClassName = "flex min-h-dvh flex-col"
 const mainClassName = "flex flex-1 flex-col"
@@ -26,20 +26,6 @@ export const Route = createFileRoute("/$locale")({
       content: getContent(params.locale),
     }
   },
-  head: ({ params }) => {
-    const locale = isLocale(params.locale) ? params.locale : "en"
-    const content = getContent(locale)
-
-    return {
-      meta: [
-        { title: content.meta.title },
-        {
-          name: "description",
-          content: content.meta.description,
-        },
-      ],
-    }
-  },
   component: LocaleLayout,
   notFoundComponent: LocaleNotFound,
 })
@@ -53,10 +39,6 @@ function LocaleLayout() {
           match.routeId === "/$locale/" || match.routeId === "/$locale/redeem"
       ),
   })
-
-  useEffect(() => {
-    document.documentElement.lang = locale
-  }, [locale])
 
   return (
     <div className={chromeShellClassName}>
@@ -75,15 +57,51 @@ function LocaleLayout() {
   )
 }
 
+function LocaleNotFoundContent({
+  locale,
+  microcopy,
+}: {
+  locale: Locale
+  microcopy: MicrocopyContent
+}) {
+  return (
+    <MainCard>
+      <section className="section-y page-gutter">
+        <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+          404
+        </p>
+        <h1 className="font-display text-foreground mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+          {microcopy.notFoundTitle}
+        </h1>
+        <p className="text-muted-foreground mt-4 max-w-prose text-lg">
+          {microcopy.notFoundBody}
+        </p>
+        <Link
+          to="/$locale"
+          params={{ locale }}
+          className="bg-primary text-primary-foreground focus-visible:ring-ring/50 mt-8 inline-flex h-11 items-center rounded-md px-5 text-sm font-medium transition-colors hover:brightness-95 focus-visible:ring-2 focus-visible:outline-none"
+        >
+          {microcopy.notFoundCtaHome}
+        </Link>
+      </section>
+    </MainCard>
+  )
+}
+
 function LocaleNotFound() {
   const params = Route.useParams()
-  const locale = isLocale(params.locale) ? params.locale : "en"
+  const hasValidLocale = isLocale(params.locale)
+  const locale: Locale = isLocale(params.locale) ? params.locale : "en"
   const content = getContent(locale)
   const { microcopy } = content
 
-  useEffect(() => {
-    document.documentElement.lang = locale
-  }, [locale])
+  const notFoundContent = (
+    <LocaleNotFoundContent locale={locale} microcopy={microcopy} />
+  )
+
+  if (hasValidLocale) {
+    return notFoundContent
+  }
 
   return (
     <div className={chromeShellClassName}>
@@ -93,26 +111,7 @@ function LocaleNotFound() {
         microcopy={microcopy}
       />
       <main id="main" className={mainClassName}>
-        <MainCard>
-          <section className="section-y page-gutter">
-            <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-              404
-            </p>
-            <h1 className="font-display text-foreground mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              {microcopy.notFoundTitle}
-            </h1>
-            <p className="text-muted-foreground mt-4 max-w-prose text-lg">
-              {microcopy.notFoundBody}
-            </p>
-            <Link
-              to="/$locale"
-              params={{ locale }}
-              className="bg-primary text-primary-foreground focus-visible:ring-ring/50 mt-8 inline-flex h-11 items-center rounded-md px-5 text-sm font-medium transition-colors hover:brightness-95 focus-visible:ring-2 focus-visible:outline-none"
-            >
-              {microcopy.notFoundCtaHome}
-            </Link>
-          </section>
-        </MainCard>
+        {notFoundContent}
       </main>
       <SiteFooter locale={locale} footer={content.chrome.footer} />
     </div>

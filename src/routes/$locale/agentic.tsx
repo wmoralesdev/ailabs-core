@@ -11,6 +11,7 @@ export const Route = createFileRoute("/$locale/agentic")({
       meta: [
         { title: `Agentic — ${meta.title}` },
         { name: "description", content: meta.description },
+        { name: "robots", content: "noindex, nofollow" },
       ],
     }
   },

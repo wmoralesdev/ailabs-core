@@ -5,12 +5,19 @@ import {
   Link,
   Scripts,
   createRootRoute,
+  useRouterState,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
+import {
+  OG_IMAGE_ALT,
+  OG_IMAGE_URL,
+  SITE_NAME,
+  localeFromPathname,
+} from "@/lib/seo"
 import appCss from "../styles.css?url"
 
 if (import.meta.env.DEV && !import.meta.env.SSR) {
@@ -19,7 +26,7 @@ if (import.meta.env.DEV && !import.meta.env.SSR) {
 
 const SITE_TITLE = "Ai Labs — Adapt, develop, and learn with AI"
 const SITE_DESCRIPTION =
-  "Ai Labs helps companies adapt, develop, and learn with AI through Academy, Agentic, and Aperture. Based in El Salvador — open beyond."
+  "Ai Labs is an AI company in El Salvador that helps companies adapt, develop, and learn with AI through Academy, Agentic, and Aperture."
 
 export const Route = createRootRoute({
   head: () => ({
@@ -29,18 +36,24 @@ export const Route = createRootRoute({
       { title: SITE_TITLE },
       { name: "description", content: SITE_DESCRIPTION },
       { name: "theme-color", content: "#303030" },
-      { name: "application-name", content: "Ai Labs" },
+      { name: "application-name", content: SITE_NAME },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Ai Labs" },
+      { property: "og:site_name", content: SITE_NAME },
       { property: "og:title", content: SITE_TITLE },
       { property: "og:description", content: SITE_DESCRIPTION },
+      { property: "og:image", content: OG_IMAGE_URL },
+      { property: "og:image:alt", content: OG_IMAGE_ALT },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: SITE_TITLE },
       { name: "twitter:description", content: SITE_DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE_URL },
+      { name: "twitter:image:alt", content: OG_IMAGE_ALT },
     ],
     links: [
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "alternate icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.json" },
       { rel: "stylesheet", href: appCss },
     ],
@@ -101,8 +114,12 @@ function RootNotFound() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const lang = useRouterState({
+    select: (state) => localeFromPathname(state.location.pathname) ?? "en",
+  })
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

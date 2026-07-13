@@ -11,6 +11,7 @@ export const Route = createFileRoute("/$locale/academy")({
       meta: [
         { title: `Academy — ${meta.title}` },
         { name: "description", content: meta.description },
+        { name: "robots", content: "noindex, nofollow" },
       ],
     }
   },

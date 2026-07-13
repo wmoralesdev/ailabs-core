@@ -11,6 +11,7 @@ export const Route = createFileRoute("/$locale/aperture")({
       meta: [
         { title: `Aperture — ${meta.title}` },
         { name: "description", content: meta.description },
+        { name: "robots", content: "noindex, nofollow" },
       ],
     }
   },
