@@ -62,15 +62,17 @@ model Redemption {
 
 model PromoCode {
   id           String    @id @default(cuid())
-  eventId      String
+  eventId      String?
   pool         Pool
   code         String
   redemptionId String?
   claimedAt    DateTime?
+  createdAt    DateTime  @default(now())
 
-  event      Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event      Event?      @relation(fields: [eventId], references: [id], onDelete: Cascade)
   redemption Redemption? @relation(fields: [redemptionId], references: [id], onDelete: SetNull)
 
-  @@unique([eventId, code])
+  @@unique([pool, code])
   @@index([eventId, pool, redemptionId])
+  @@index([pool, eventId, redemptionId])
 }
