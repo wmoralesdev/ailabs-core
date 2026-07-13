@@ -95,6 +95,9 @@ export type RedeemContent = {
   noVerifiedEmailBody: string
   missingCodeTitle: string
   missingCodeBody: string
+  qrCta: string
+  qrTitle: string
+  qrBody: string
   poolLabels: {
     CURSOR: string
     CODEX: string
@@ -228,8 +231,29 @@ export type HomeContactContent = {
   error: string
 }
 
+/** Tech partner logos shown in the home trust strip. */
+export type TrustLogoId =
+  | "cursor"
+  | "codex"
+  | "openai"
+  | "claude"
+  | "mistral"
+  | "elevenlabs"
+  | "notion"
+
+export type HomeTrustLogo = {
+  id: TrustLogoId
+  name: string
+}
+
+export type HomeTrustContent = {
+  label: string
+  logos: ReadonlyArray<HomeTrustLogo>
+}
+
 export type HomeContent = {
   hero: HomeHeroContent
+  trust: HomeTrustContent
   about: HomeAboutContent
   academy: HomePillarContent
   agentic: HomePillarContent

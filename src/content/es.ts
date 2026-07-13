@@ -6,7 +6,7 @@ export const es: SiteContent = {
   meta: {
     title: "Ai Labs — Adáptate, desarrolla y aprende con IA",
     description:
-      "Ai Labs ayuda a las empresas a adaptarse, desarrollar y aprender con IA a través de Academy, Agentic y Aperture. Con base en El Salvador.",
+      "Ai Labs es una empresa de IA en El Salvador que ayuda a las empresas a adaptarse, desarrollar y aprender con IA a través de Academy, Agentic y Aperture.",
   },
   chrome: {
     nav: {
@@ -63,7 +63,7 @@ export const es: SiteContent = {
     hero: {
       label: "IA práctica",
       headline: "Adáptate, desarrolla y aprende con IA",
-      body: "Academy forma a tu equipo, Agentic construye tu software y Aperture te conecta con las personas y empresas que están construyendo con IA. Con base en El Salvador — y más allá.",
+      body: "Academy forma a tu equipo, Agentic construye tu software y Aperture te conecta con builders — desde El Salvador, y más allá.",
       primaryCta: { label: "Empecemos", href: "#contact" },
       secondaryCta: { label: "Conoce los pilares", href: "#academy" },
       proof: { value: "800+", label: "Builders" },
@@ -75,17 +75,29 @@ export const es: SiteContent = {
       ],
       slides: [
         { value: "800+", label: "Builders", icon: "builders" },
-        { value: "30+", label: "Eventos realizados", icon: "events" },
+        { value: "40+", label: "Eventos realizados", icon: "events" },
         { value: "8", label: "Partners activos", icon: "partners" },
       ],
       mediaSrcs: homeCarousel.hero,
       mediaAlt: "Sesión de comunidad de Ai Labs",
     },
+    trust: {
+      label: "Compañías con las que trabajamos",
+      logos: [
+        { id: "cursor", name: "Cursor" },
+        { id: "codex", name: "Codex" },
+        { id: "openai", name: "OpenAI" },
+        { id: "claude", name: "Claude" },
+        { id: "mistral", name: "Mistral" },
+        { id: "elevenlabs", name: "ElevenLabs" },
+        { id: "notion", name: "Notion" },
+      ],
+    },
     about: {
       label: "Por qué vienen las empresas",
       body: "Necesitan IA que puedan usar: formar un equipo, lanzar un producto, o acercarse a builders que ya usan las herramientas. Corremos las sesiones y entregamos el software.",
       stats: [
-        { value: "30+", label: "Eventos realizados" },
+        { value: "40+", label: "Eventos realizados" },
         { value: "8", label: "Partners activos" },
       ],
       bold: "Adaptarse es que tu equipo use las herramientas. Desarrollar es que algo se lance. Aprender es que la práctica quede — no otro deck sobre “el futuro de la IA.”",
@@ -309,6 +321,9 @@ export const es: SiteContent = {
       "Tu cuenta necesita un correo verificado antes de canjear créditos.",
     missingCodeTitle: "Falta el código",
     missingCodeBody: "Abre el enlace completo que incluye ?code=…",
+    qrCta: "QR",
+    qrTitle: "Escanea para abrir",
+    qrBody: "Escanea este código para abrir esta página en otro dispositivo.",
     poolLabels: {
       CURSOR: "Cursor",
       CODEX: "Codex",

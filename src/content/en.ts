@@ -6,7 +6,7 @@ export const en: SiteContent = {
   meta: {
     title: "Ai Labs — Adapt, develop, and learn with AI",
     description:
-      "Ai Labs helps companies adapt, develop, and learn with AI through Academy, Agentic, and Aperture. Based in El Salvador.",
+      "Ai Labs is an AI company in El Salvador that helps companies adapt, develop, and learn with AI through Academy, Agentic, and Aperture.",
   },
   chrome: {
     nav: {
@@ -63,7 +63,7 @@ export const en: SiteContent = {
     hero: {
       label: "Practical AI work",
       headline: "Adapt, develop, and learn with AI",
-      body: "Academy trains your team, Agentic builds your software, and Aperture connects you to the people and companies building with AI. Based in El Salvador — open beyond.",
+      body: "Academy trains your team, Agentic builds your software, and Aperture connects you to builders — from El Salvador, open beyond.",
       primaryCta: { label: "Get started", href: "#contact" },
       secondaryCta: { label: "See the pillars", href: "#academy" },
       proof: { value: "800+", label: "Builders" },
@@ -75,17 +75,29 @@ export const en: SiteContent = {
       ],
       slides: [
         { value: "800+", label: "Builders", icon: "builders" },
-        { value: "30+", label: "Events hosted", icon: "events" },
+        { value: "40+", label: "Events hosted", icon: "events" },
         { value: "8", label: "Active partners", icon: "partners" },
       ],
       mediaSrcs: homeCarousel.hero,
       mediaAlt: "Ai Labs community session",
     },
+    trust: {
+      label: "Companies we work with",
+      logos: [
+        { id: "cursor", name: "Cursor" },
+        { id: "codex", name: "Codex" },
+        { id: "openai", name: "OpenAI" },
+        { id: "claude", name: "Claude" },
+        { id: "mistral", name: "Mistral" },
+        { id: "elevenlabs", name: "ElevenLabs" },
+        { id: "notion", name: "Notion" },
+      ],
+    },
     about: {
       label: "Why companies come",
       body: "They need AI they can use: train a team, ship a product, or get close to builders already in the tools. We run the sessions and ship the software.",
       stats: [
-        { value: "30+", label: "Events hosted" },
+        { value: "40+", label: "Events hosted" },
         { value: "8", label: "Active partners" },
       ],
       bold: "Adapt means your team can use the tools. Develop means something ships. Learn means practice sticks — not another deck about the future of AI.",
@@ -309,6 +321,9 @@ export const en: SiteContent = {
       "Your account needs a verified email before you can claim credits.",
     missingCodeTitle: "Missing code",
     missingCodeBody: "Open the full redeem link that includes ?code=…",
+    qrCta: "QR",
+    qrTitle: "Scan to open",
+    qrBody: "Scan this code to open this page on another device.",
     poolLabels: {
       CURSOR: "Cursor",
       CODEX: "Codex",
