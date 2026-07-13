@@ -18,7 +18,9 @@ const SIZE_RADIUS_PX: Record<AvatarSize, { base: number; sm: number }> = {
   lg: { base: 32, sm: 40 },
 }
 
-const ENLARGE_SCALE = 1.55
+/** Modal-like in-place grow — keep in sync with CSS `--home-partner-enlarge`. */
+const ENLARGE_SCALE = 2.4
+const ENLARGE_DURATION_MS = 5000
 const RESOLVE_ITERATIONS = 4
 
 function parsePercent(value: string): number {
@@ -147,10 +149,11 @@ function clampAll(
 }
 
 export {
+  ENLARGE_DURATION_MS,
   ENLARGE_SCALE,
-  collisionRadius,
   clampAll,
   clampToBounds,
+  collisionRadius,
   radiusForSize,
   resolveCollisions,
   slotToCenter,

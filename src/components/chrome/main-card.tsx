@@ -2,7 +2,7 @@ import { MainGridBackground } from "@/components/chrome/main-grid-background"
 import { cn } from "@/lib/utils"
 
 const mainCardClassName =
-  "relative mx-2 mt-0 mb-[var(--main-card-margin-bottom)] flex min-h-[var(--main-card-min-height)] shrink-0 overflow-hidden rounded-xl border border-border bg-muted/30 p-2 sm:mx-3 sm:mt-0 sm:p-3"
+  "relative mx-2 mt-[var(--main-card-margin-top)] mb-[var(--main-card-margin-bottom)] flex min-h-[var(--main-card-min-height)] shrink-0 overflow-hidden rounded-xl border border-border bg-muted/30 p-2 sm:mx-3 sm:p-3"
 
 type MainCardProps = {
   children: React.ReactNode

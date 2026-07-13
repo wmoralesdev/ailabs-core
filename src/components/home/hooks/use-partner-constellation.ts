@@ -4,10 +4,11 @@ import {
   useRef,
   useState,
 } from "react"
-import type { PointerEvent as ReactPointerEvent, RefObject } from "react"
+import type { RefObject } from "react"
 
 import type { HomePartnerMember } from "@/content"
 import {
+  ENLARGE_DURATION_MS,
   clampAll,
   collisionRadius,
   resolveCollisions,
@@ -15,22 +16,11 @@ import {
 } from "@/components/home/home-partner-avatar-physics"
 import type { Point } from "@/components/home/home-partner-avatar-physics"
 import {
-  DRAG_CLICK_THRESHOLD_PX,
   MEMBER_DISPLAY_COUNT,
   MEMBER_SLOTS,
   SM_BREAKPOINT_PX,
 } from "@/components/home/home-partner-constellation-config"
 import type { MemberSlot } from "@/components/home/home-partner-constellation-config"
-
-type DragSession = {
-  id: string
-  pointerId: number
-  grabOffsetX: number
-  grabOffsetY: number
-  startX: number
-  startY: number
-  moved: boolean
-}
 
 function buildRadii(
   members: ReadonlyArray<HomePartnerMember>,
@@ -57,21 +47,13 @@ function buildRadii(
 type UsePartnerConstellationResult = {
   fieldRef: RefObject<HTMLDivElement | null>
   revealed: boolean
+  entered: boolean
   visibleMembers: ReadonlyArray<HomePartnerMember>
   slots: ReadonlyArray<MemberSlot>
   positions: Record<string, Point>
   enlargedId: string | null
-  draggingId: string | null
   isSmUp: boolean
-  handlePointerDown: (
-    event: ReactPointerEvent<HTMLButtonElement>,
-    memberId: string
-  ) => void
-  handlePointerMove: (event: ReactPointerEvent<HTMLButtonElement>) => void
-  handlePointerEnd: (
-    event: ReactPointerEvent<HTMLButtonElement>,
-    memberId: string
-  ) => void
+  toggleEnlarge: (memberId: string) => void
 }
 
 function usePartnerConstellation(
@@ -79,11 +61,15 @@ function usePartnerConstellation(
 ): UsePartnerConstellationResult {
   const fieldRef = useRef<HTMLDivElement>(null)
   const positionsRef = useRef<Record<string, Point>>({})
-  const dragRef = useRef<DragSession | null>(null)
+  const enlargedIdRef = useRef<string | null>(null)
+  const fieldSizeRef = useRef({ width: 0, height: 0 })
+  const enlargeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const reduceMotionRef = useRef(false)
+
   const [revealed, setRevealed] = useState(false)
+  const [entered, setEntered] = useState(false)
   const [enlargedId, setEnlargedId] = useState<string | null>(null)
   const [positions, setPositions] = useState<Record<string, Point>>({})
-  const [draggingId, setDraggingId] = useState<string | null>(null)
   const [fieldSize, setFieldSize] = useState({ width: 0, height: 0 })
 
   const visibleMembers = members.slice(0, MEMBER_DISPLAY_COUNT)
@@ -95,6 +81,24 @@ function usePartnerConstellation(
   }, [positions])
 
   useEffect(() => {
+    enlargedIdRef.current = enlargedId
+  }, [enlargedId])
+
+  useEffect(() => {
+    fieldSizeRef.current = fieldSize
+  }, [fieldSize])
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)")
+    reduceMotionRef.current = media.matches
+    const onChange = () => {
+      reduceMotionRef.current = media.matches
+    }
+    media.addEventListener("change", onChange)
+    return () => media.removeEventListener("change", onChange)
+  }, [])
+
+  useEffect(() => {
     const node = fieldRef.current
     if (!node) {
       return
@@ -103,6 +107,7 @@ function usePartnerConstellation(
     const media = window.matchMedia("(prefers-reduced-motion: reduce)")
     if (media.matches) {
       setRevealed(true)
+      setEntered(true)
       return
     }
 
@@ -121,12 +126,60 @@ function usePartnerConstellation(
   }, [])
 
   useEffect(() => {
+    if (!revealed || reduceMotionRef.current) {
+      return
+    }
+    // Enter delay max (~15 * 28ms) + enter duration (~480ms)
+    const timer = window.setTimeout(() => setEntered(true), 920)
+    return () => window.clearTimeout(timer)
+  }, [revealed])
+
+  const clearEnlargeTimer = useCallback(() => {
+    if (enlargeTimerRef.current !== null) {
+      clearTimeout(enlargeTimerRef.current)
+      enlargeTimerRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => clearEnlargeTimer()
+  }, [clearEnlargeTimer])
+
+  const applyPhysics = useCallback(
+    (nextCenters: Record<string, Point>, enlarged: string | null) => {
+      const { width, height } = fieldSizeRef.current
+      if (width <= 0 || height <= 0) {
+        return
+      }
+
+      const smUp = width >= SM_BREAKPOINT_PX
+      const layoutMembers = members.slice(0, MEMBER_DISPLAY_COUNT)
+      const layoutSlots = MEMBER_SLOTS.slice(0, layoutMembers.length)
+      const radii = buildRadii(layoutMembers, layoutSlots, enlarged, smUp)
+      const bodies = Object.entries(nextCenters).map(([id, center]) => ({
+        id,
+        center,
+        radius: radii[id] ?? 0,
+      }))
+
+      // Enlarged bubble stays put; neighbors absorb the growth, then clamp all in-bounds.
+      const resolved = resolveCollisions(bodies, enlarged)
+      if (enlarged && nextCenters[enlarged]) {
+        resolved[enlarged] = nextCenters[enlarged]!
+      }
+      const clamped = clampAll(resolved, radii, width, height)
+      setPositions(clamped)
+    },
+    [members]
+  )
+
+  useEffect(() => {
     const node = fieldRef.current
     if (!node) {
       return
     }
 
-    const layout = (width: number, height: number, enlarged: string | null) => {
+    const layout = (width: number, height: number) => {
       if (width <= 0 || height <= 0) {
         return
       }
@@ -147,11 +200,7 @@ function usePartnerConstellation(
           continue
         }
 
-        radii[member.id] = collisionRadius(
-          slot.size,
-          smUp,
-          enlarged === member.id
-        )
+        radii[member.id] = collisionRadius(slot.size, smUp, false)
 
         if (hadPositions && previous[member.id]) {
           nextCenters[member.id] = previous[member.id]!
@@ -179,141 +228,50 @@ function usePartnerConstellation(
         return
       }
       const { width, height } = entry.contentRect
-      layout(width, height, enlargedId)
+      layout(width, height)
     })
 
     observer.observe(node)
     const rect = node.getBoundingClientRect()
-    layout(rect.width, rect.height, enlargedId)
+    layout(rect.width, rect.height)
 
     return () => observer.disconnect()
-  }, [members, enlargedId])
+  }, [members])
 
-  const applyPhysics = useCallback(
-    (nextCenters: Record<string, Point>, activeDragId: string | null) => {
-      const { width, height } = fieldSize
-      if (width <= 0 || height <= 0) {
-        return
-      }
+  // Nudge neighbors when the enlarge radius changes; keep the enlarged center fixed.
+  useEffect(() => {
+    if (Object.keys(positionsRef.current).length === 0) {
+      return
+    }
+    applyPhysics(positionsRef.current, enlargedId)
+  }, [enlargedId, applyPhysics])
 
-      const radii = buildRadii(visibleMembers, slots, enlargedId, isSmUp)
-      const bodies = Object.entries(nextCenters).map(([id, center]) => ({
-        id,
-        center,
-        radius: radii[id] ?? 0,
-      }))
+  const toggleEnlarge = useCallback(
+    (memberId: string) => {
+      clearEnlargeTimer()
+      const nextId = enlargedIdRef.current === memberId ? null : memberId
+      setEnlargedId(nextId)
 
-      const resolved = resolveCollisions(bodies, activeDragId)
-      if (activeDragId && nextCenters[activeDragId]) {
-        resolved[activeDragId] = nextCenters[activeDragId]!
-      }
-      const clamped = clampAll(resolved, radii, width, height)
-      if (activeDragId && nextCenters[activeDragId]) {
-        const r = radii[activeDragId] ?? 0
-        clamped[activeDragId] = {
-          x: Math.min(width - r, Math.max(r, nextCenters[activeDragId]!.x)),
-          y: Math.min(height - r, Math.max(r, nextCenters[activeDragId]!.y)),
-        }
-      }
-
-      setPositions(clamped)
-    },
-    [fieldSize, visibleMembers, slots, enlargedId, isSmUp]
-  )
-
-  const handlePointerDown = useCallback(
-    (event: ReactPointerEvent<HTMLButtonElement>, memberId: string) => {
-      if (event.button !== 0) {
-        return
-      }
-
-      const node = fieldRef.current
-      const center = positionsRef.current[memberId]
-      if (!node || !center) {
-        return
-      }
-
-      const bounds = node.getBoundingClientRect()
-      const pointerX = event.clientX - bounds.left
-      const pointerY = event.clientY - bounds.top
-
-      dragRef.current = {
-        id: memberId,
-        pointerId: event.pointerId,
-        grabOffsetX: pointerX - center.x,
-        grabOffsetY: pointerY - center.y,
-        startX: center.x,
-        startY: center.y,
-        moved: false,
-      }
-
-      setDraggingId(memberId)
-      event.currentTarget.setPointerCapture(event.pointerId)
-    },
-    []
-  )
-
-  const handlePointerMove = useCallback(
-    (event: ReactPointerEvent<HTMLButtonElement>) => {
-      const session = dragRef.current
-      const node = fieldRef.current
-      if (!session || session.pointerId !== event.pointerId || !node) {
-        return
-      }
-
-      const bounds = node.getBoundingClientRect()
-      const pointerX = event.clientX - bounds.left
-      const pointerY = event.clientY - bounds.top
-      const nextX = pointerX - session.grabOffsetX
-      const nextY = pointerY - session.grabOffsetY
-      const travel = Math.hypot(nextX - session.startX, nextY - session.startY)
-      if (travel > DRAG_CLICK_THRESHOLD_PX) {
-        session.moved = true
-      }
-
-      const nextCenters = {
-        ...positionsRef.current,
-        [session.id]: { x: nextX, y: nextY },
-      }
-      applyPhysics(nextCenters, session.id)
-    },
-    [applyPhysics]
-  )
-
-  const handlePointerEnd = useCallback(
-    (event: ReactPointerEvent<HTMLButtonElement>, memberId: string) => {
-      const session = dragRef.current
-      if (!session || session.pointerId !== event.pointerId) {
-        return
-      }
-
-      const wasClick = !session.moved
-      dragRef.current = null
-      setDraggingId(null)
-
-      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-        event.currentTarget.releasePointerCapture(event.pointerId)
-      }
-
-      if (wasClick && session.id === memberId) {
-        setEnlargedId((current) => (current === memberId ? null : memberId))
+      if (nextId) {
+        enlargeTimerRef.current = setTimeout(() => {
+          setEnlargedId((current) => (current === nextId ? null : current))
+          enlargeTimerRef.current = null
+        }, ENLARGE_DURATION_MS)
       }
     },
-    []
+    [clearEnlargeTimer]
   )
 
   return {
     fieldRef,
     revealed,
+    entered,
     visibleMembers,
     slots,
     positions,
     enlargedId,
-    draggingId,
     isSmUp,
-    handlePointerDown,
-    handlePointerMove,
-    handlePointerEnd,
+    toggleEnlarge,
   }
 }
 

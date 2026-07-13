@@ -17,7 +17,13 @@ type Dot = {
   delay: number
 }
 
-function HomeHeroStipple() {
+type StippleOrigin = "corner" | "center"
+
+type HomeHeroStippleProps = {
+  origin?: StippleOrigin
+}
+
+function HomeHeroStipple({ origin = "corner" }: HomeHeroStippleProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -78,10 +84,15 @@ function HomeHeroStipple() {
         return
       }
 
+      const halfW = width / 2
+      const halfH = height / 2
+
       for (let y = 0; y <= height; y += GRID_STEP) {
         for (let x = 0; x <= width; x += GRID_STEP) {
-          const nx = (width - x) / width
-          const ny = (height - y) / height
+          const nx =
+            origin === "center" ? (x - halfW) / halfW : (width - x) / width
+          const ny =
+            origin === "center" ? (y - halfH) / halfH : (height - y) / height
           const radius = Math.hypot(nx, ny)
           const mask = Math.min(
             1,
@@ -176,7 +187,7 @@ function HomeHeroStipple() {
       themeObserver.disconnect()
       reduceMedia.removeEventListener("change", onReduceChange)
     }
-  }, [])
+  }, [origin])
 
   return (
     <canvas

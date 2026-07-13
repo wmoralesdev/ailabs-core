@@ -203,7 +203,7 @@ function HomeHeroMobile({
             "pt-[calc(env(safe-area-inset-top)+4.5rem)]"
           )}
         >
-          <div className="flex max-w-xl flex-col gap-5">
+          <div className="flex max-w-xl flex-col gap-4">
             <p
               className={cn(
                 heroLabelClassName,
@@ -223,30 +223,23 @@ function HomeHeroMobile({
             </h1>
             <p
               className={cn(
-                "text-on-dark/80 max-w-md text-base leading-relaxed",
+                "text-on-dark/80 max-w-sm text-sm leading-relaxed sm:text-base",
                 "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-150 motion-safe:duration-500"
               )}
             >
               {hero.body}
             </p>
-            <div
+            <a
+              href={hero.primaryCta.href}
               className={cn(
-                "flex flex-wrap items-center gap-3",
+                homePillClassName,
+                "w-fit",
                 "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-200 motion-safe:duration-500"
               )}
             >
-              <a href={hero.primaryCta.href} className={cn(homePillClassName, "w-fit")}>
-                {hero.primaryCta.label}
-                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-              </a>
-              <a
-                href={hero.secondaryCta.href}
-                className="border-on-dark/30 text-on-dark hover:bg-on-dark/10 inline-flex h-11 w-fit items-center gap-2 rounded-full border bg-transparent px-5 text-sm font-medium backdrop-blur-sm motion-safe:transition-colors motion-safe:duration-150"
-              >
-                {hero.secondaryCta.label}
-                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-              </a>
-            </div>
+              {hero.primaryCta.label}
+              <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+            </a>
           </div>
 
           <div

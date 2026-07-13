@@ -1,7 +1,9 @@
-import type { PointerEvent as ReactPointerEvent } from "react"
-
 import type { HomePartnerMember } from "@/content"
-import { radiusForSize } from "@/components/home/home-partner-avatar-physics"
+import {
+  ENLARGE_DURATION_MS,
+  ENLARGE_SCALE,
+  radiusForSize,
+} from "@/components/home/home-partner-avatar-physics"
 import type { Point } from "@/components/home/home-partner-avatar-physics"
 import {
   fillClassName,
@@ -17,17 +19,8 @@ type HomePartnerAvatarProps = {
   index: number
   center: Point | undefined
   isEnlarged: boolean
-  isDragging: boolean
   isSmUp: boolean
-  onPointerDown: (
-    event: ReactPointerEvent<HTMLButtonElement>,
-    memberId: string
-  ) => void
-  onPointerMove: (event: ReactPointerEvent<HTMLButtonElement>) => void
-  onPointerEnd: (
-    event: ReactPointerEvent<HTMLButtonElement>,
-    memberId: string
-  ) => void
+  onToggle: (memberId: string) => void
 }
 
 function HomePartnerAvatar({
@@ -36,11 +29,8 @@ function HomePartnerAvatar({
   index,
   center,
   isEnlarged,
-  isDragging,
   isSmUp,
-  onPointerDown,
-  onPointerMove,
-  onPointerEnd,
+  onToggle,
 }: HomePartnerAvatarProps) {
   const imageSrc = resolveMemberImageSrc(member, index)
   const label = member.imageAlt ?? "Community member"
@@ -51,27 +41,39 @@ function HomePartnerAvatar({
       type="button"
       aria-label={label}
       aria-pressed={isEnlarged}
-      data-dragging={isDragging ? "true" : "false"}
+      data-enlarged={isEnlarged ? "true" : "false"}
       className={cn(
-        "home-partner-avatar absolute inline-flex cursor-grab items-center justify-center rounded-full border border-border/50 p-0 text-xs font-semibold uppercase focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:cursor-grabbing sm:text-sm",
+        "home-partner-avatar absolute inline-flex cursor-pointer items-center justify-center rounded-full border border-border/50 p-0 text-xs font-semibold uppercase focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:text-sm",
         sizeClassName[slot.size],
         !imageSrc && fillClassName[slot.fill],
-        (isEnlarged || isDragging) && "z-20"
+        isEnlarged && "z-30"
       )}
       style={{
         top: center ? center.y - radius : slot.top,
         left: center ? center.x - radius : slot.left,
         ["--i" as string]: index,
+        ["--home-partner-enlarge" as string]: ENLARGE_SCALE,
+        ["--home-partner-enlarge-ms" as string]: `${ENLARGE_DURATION_MS}ms`,
       }}
-      onPointerDown={(event) => onPointerDown(event, member.id)}
-      onPointerMove={onPointerMove}
-      onPointerUp={(event) => onPointerEnd(event, member.id)}
-      onPointerCancel={(event) => onPointerEnd(event, member.id)}
+      onClick={() => onToggle(member.id)}
     >
-      <span
-        className="home-partner-avatar-face inline-flex size-full items-center justify-center overflow-hidden rounded-full"
-        data-enlarged={isEnlarged ? "true" : "false"}
-      >
+      {isEnlarged ? (
+        <svg
+          className="home-partner-avatar-timer pointer-events-none absolute inset-[-3px] size-[calc(100%+6px)] -rotate-90"
+          viewBox="0 0 100 100"
+          aria-hidden="true"
+        >
+          <circle
+            className="home-partner-avatar-timer-progress"
+            cx="50"
+            cy="50"
+            r="48"
+            fill="none"
+            pathLength={100}
+          />
+        </svg>
+      ) : null}
+      <span className="home-partner-avatar-face inline-flex size-full items-center justify-center overflow-hidden rounded-full">
         {imageSrc ? (
           <img
             src={imageSrc}

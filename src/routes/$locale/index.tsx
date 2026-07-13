@@ -6,8 +6,10 @@ import { HomeContact } from "@/components/home/home-contact"
 import { HomeHero } from "@/components/home/home-hero"
 import { HomePillar } from "@/components/home/home-pillar"
 import { HomeReveal } from "@/components/home/home-reveal"
+import { HomeTrust } from "@/components/home/home-trust"
 import { homeSectionGapClassName } from "@/components/home/home-styles"
 import { getContent, isLocale } from "@/content"
+import { buildHomeJsonLd, buildPageMeta } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 const localeRoute = getRouteApi("/$locale")
@@ -15,12 +17,37 @@ const localeRoute = getRouteApi("/$locale")
 export const Route = createFileRoute("/$locale/")({
   head: ({ params }) => {
     const locale = isLocale(params.locale) ? params.locale : "en"
-    const { meta } = getContent(locale)
+    const content = getContent(locale)
+    const { meta, home } = content
+    const page = buildPageMeta({
+      locale,
+      title: meta.title,
+      description: meta.description,
+    })
 
     return {
-      meta: [
-        { title: meta.title },
-        { name: "description", content: meta.description },
+      meta: page.meta,
+      links: page.links,
+      scripts: [
+        buildHomeJsonLd({
+          locale,
+          title: meta.title,
+          description: meta.description,
+          pillars: [
+            {
+              name: home.academy.title,
+              description: home.academy.lead,
+            },
+            {
+              name: home.agentic.title,
+              description: home.agentic.lead,
+            },
+            {
+              name: home.aperture.title,
+              description: home.aperture.lead,
+            },
+          ],
+        }),
       ],
     }
   },
@@ -39,7 +66,8 @@ function HomePage() {
         chrome={chrome}
         microcopy={microcopy}
       />
-      <HomeReveal className="max-lg:mt-0 lg:-mt-14">
+      <HomeTrust trust={home.trust} />
+      <HomeReveal>
         <HomeAbout about={home.about} />
       </HomeReveal>
       <HomeReveal>

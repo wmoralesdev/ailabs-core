@@ -61,8 +61,8 @@ possibly stale value into this file.
 ## Current application
 
 - `/` redirects from the request language to `/en` or `/es`.
-- The localized home page is implemented in this order: Hero, About, Features,
-  Partner, Trust, and Contact, followed by the shared footer.
+- The localized home page is implemented in this order: Hero, Trust, About,
+  Academy, Agentic, Aperture, and Contact, followed by the shared footer.
 - `/en/academy`, `/en/agentic`, and `/en/aperture` (and their Spanish
   equivalents) currently have route metadata but render no page content.
   Do not describe them as shipped pages.

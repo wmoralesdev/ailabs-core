@@ -117,7 +117,7 @@ function HomeContact({ contact }: HomeContactProps) {
           </div>
 
           <fieldset className="flex flex-col gap-3">
-            <legend className={labelClassName}>{contact.interestLabel}</legend>
+            <legend className={cn(labelClassName, "mb-2")}>{contact.interestLabel}</legend>
             <div className="flex flex-wrap gap-2">
               {contact.interestOptions.map((option) => (
                 <label
