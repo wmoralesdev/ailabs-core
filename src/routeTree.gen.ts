@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as BgRouteImport } from './routes/bg'
 import { Route as LocaleRouteImport } from './routes/$locale'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocaleIndexRouteImport } from './routes/$locale/index'
@@ -19,6 +20,11 @@ import { Route as LocaleApertureRouteImport } from './routes/$locale/aperture'
 import { Route as LocaleAgenticRouteImport } from './routes/$locale/agentic'
 import { Route as LocaleAcademyRouteImport } from './routes/$locale/academy'
 
+const BgRoute = BgRouteImport.update({
+  id: '/bg',
+  path: '/bg',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocaleRoute = LocaleRouteImport.update({
   id: '/$locale',
   path: '/$locale',
@@ -68,6 +74,7 @@ const LocaleAcademyRoute = LocaleAcademyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
+  '/bg': typeof BgRoute
   '/$locale/academy': typeof LocaleAcademyRoute
   '/$locale/agentic': typeof LocaleAgenticRoute
   '/$locale/aperture': typeof LocaleApertureRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bg': typeof BgRoute
   '/$locale/academy': typeof LocaleAcademyRoute
   '/$locale/agentic': typeof LocaleAgenticRoute
   '/$locale/aperture': typeof LocaleApertureRoute
@@ -90,6 +98,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
+  '/bg': typeof BgRoute
   '/$locale/academy': typeof LocaleAcademyRoute
   '/$locale/agentic': typeof LocaleAgenticRoute
   '/$locale/aperture': typeof LocaleApertureRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$locale'
+    | '/bg'
     | '/$locale/academy'
     | '/$locale/agentic'
     | '/$locale/aperture'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/bg'
     | '/$locale/academy'
     | '/$locale/agentic'
     | '/$locale/aperture'
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$locale'
+    | '/bg'
     | '/$locale/academy'
     | '/$locale/agentic'
     | '/$locale/aperture'
@@ -136,12 +148,20 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LocaleRoute: typeof LocaleRouteWithChildren
+  BgRoute: typeof BgRoute
   SignInSplatRoute: typeof SignInSplatRoute
   SignUpSplatRoute: typeof SignUpSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/bg': {
+      id: '/bg'
+      path: '/bg'
+      fullPath: '/bg'
+      preLoaderRoute: typeof BgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$locale': {
       id: '/$locale'
       path: '/$locale'
@@ -230,6 +250,7 @@ const LocaleRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LocaleRoute: LocaleRouteWithChildren,
+  BgRoute: BgRoute,
   SignInSplatRoute: SignInSplatRoute,
   SignUpSplatRoute: SignUpSplatRoute,
 }
