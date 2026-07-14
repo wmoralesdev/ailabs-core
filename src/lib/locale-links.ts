@@ -8,6 +8,7 @@ const INTERNAL_ROUTES = {
   "/academy": "/$locale/academy",
   "/agentic": "/$locale/agentic",
   "/aperture": "/$locale/aperture",
+  "/community": "/$locale/community",
 } as const
 
 type InternalHref = keyof typeof INTERNAL_ROUTES

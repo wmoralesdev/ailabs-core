@@ -13,7 +13,7 @@ import { LOCALES } from "@/content"
 import { SiteLogo } from "@/components/chrome/site-logo"
 import { ThemeToggle } from "@/components/chrome/theme-toggle"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { routeForPillar } from "@/lib/locale-links"
+import { routeForHref, routeForPillar } from "@/lib/locale-links"
 import { useScrolled } from "@/lib/use-scrolled"
 import { cn } from "@/lib/utils"
 
@@ -78,6 +78,14 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
               {pillar.label}
             </Link>
           ))}
+          <Link
+            to={routeForHref("/community")}
+            params={{ locale }}
+            className={navLinkClassName}
+            activeProps={{ className: activeNavLinkClassName }}
+          >
+            {chrome.nav.community.label}
+          </Link>
           <a href={chrome.nav.contact.href} className={navLinkClassName}>
             {chrome.nav.contact.label}
           </a>
@@ -145,6 +153,15 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
                 {pillar.label}
               </Link>
             ))}
+            <Link
+              to={routeForHref("/community")}
+              params={{ locale }}
+              onClick={closeMenu}
+              className={cn(navLinkClassName, "text-base")}
+              activeProps={{ className: activeNavLinkClassName }}
+            >
+              {chrome.nav.community.label}
+            </Link>
             <a
               href={chrome.nav.contact.href}
               onClick={closeMenu}
