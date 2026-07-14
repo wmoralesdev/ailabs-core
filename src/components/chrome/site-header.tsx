@@ -13,7 +13,7 @@ import { LOCALES } from "@/content"
 import { SiteLogo } from "@/components/chrome/site-logo"
 import { ThemeToggle } from "@/components/chrome/theme-toggle"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { routeForHref, routeForPillar } from "@/lib/locale-links"
+import { hashFromHref, routeForHref } from "@/lib/locale-links"
 import { useScrolled } from "@/lib/use-scrolled"
 import { cn } from "@/lib/utils"
 
@@ -70,10 +70,10 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
           {chrome.nav.pillars.map((pillar) => (
             <Link
               key={pillar.id}
-              to={routeForPillar(pillar.id)}
+              to="/$locale"
               params={{ locale }}
+              hash={hashFromHref(pillar.href)}
               className={navLinkClassName}
-              activeProps={{ className: activeNavLinkClassName }}
             >
               {pillar.label}
             </Link>
@@ -86,9 +86,14 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
           >
             {chrome.nav.community.label}
           </Link>
-          <a href={chrome.nav.contact.href} className={navLinkClassName}>
+          <Link
+            to="/$locale"
+            params={{ locale }}
+            hash={hashFromHref(chrome.nav.contact.href)}
+            className={navLinkClassName}
+          >
             {chrome.nav.contact.label}
-          </a>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -111,8 +116,10 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
           >
             {microcopy.languageSwitch}
           </Link>
-          <a
-            href={chrome.nav.cta.href}
+          <Link
+            to="/$locale"
+            params={{ locale }}
+            hash={hashFromHref(chrome.nav.cta.href)}
             className={cn(
               buttonVariants({ size: "sm" }),
               "hidden md:inline-flex",
@@ -120,7 +127,7 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
             )}
           >
             {chrome.nav.cta.label}
-          </a>
+          </Link>
           <Button
             variant="ghost"
             size="icon-sm"
@@ -144,11 +151,11 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
             {chrome.nav.pillars.map((pillar) => (
               <Link
                 key={pillar.id}
-                to={routeForPillar(pillar.id)}
+                to="/$locale"
                 params={{ locale }}
+                hash={hashFromHref(pillar.href)}
                 onClick={closeMenu}
                 className={cn(navLinkClassName, "text-base")}
-                activeProps={{ className: activeNavLinkClassName }}
               >
                 {pillar.label}
               </Link>
@@ -162,15 +169,19 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
             >
               {chrome.nav.community.label}
             </Link>
-            <a
-              href={chrome.nav.contact.href}
+            <Link
+              to="/$locale"
+              params={{ locale }}
+              hash={hashFromHref(chrome.nav.contact.href)}
               onClick={closeMenu}
               className={cn(navLinkClassName, "text-base")}
             >
               {chrome.nav.contact.label}
-            </a>
-            <a
-              href={chrome.nav.cta.href}
+            </Link>
+            <Link
+              to="/$locale"
+              params={{ locale }}
+              hash={hashFromHref(chrome.nav.cta.href)}
               onClick={closeMenu}
               className={cn(
                 buttonVariants({ size: "default" }),
@@ -179,7 +190,7 @@ function SiteHeader({ locale, chrome, microcopy }: SiteHeaderProps) {
               )}
             >
               {chrome.nav.cta.label}
-            </a>
+            </Link>
           </div>
         </nav>
       ) : null}

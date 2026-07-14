@@ -25,7 +25,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { routeForHref, routeForPillar } from "@/lib/locale-links"
+import { routeForHref } from "@/lib/locale-links"
 import { useScrolledPastHero } from "@/hooks/use-scrolled-past-hero"
 import { cn } from "@/lib/utils"
 import {
@@ -157,15 +157,14 @@ function HomeHeroMobile({
             className="flex flex-1 flex-col gap-5 px-6 py-8"
           >
             {chrome.nav.pillars.map((pillar) => (
-              <Link
+              <a
                 key={pillar.id}
-                to={routeForPillar(pillar.id)}
-                params={{ locale }}
+                href={pillar.href}
                 onClick={closeMenu}
                 className={sheetNavLinkClassName}
               >
                 {pillar.label}
-              </Link>
+              </a>
             ))}
             <Link
               to={routeForHref("/community")}

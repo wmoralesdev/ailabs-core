@@ -14,7 +14,7 @@ import { ThemeToggle } from "@/components/chrome/theme-toggle"
 import { HomeHeroStipple } from "@/components/home/home-hero-stipple"
 import { HomeMediaCarousel } from "@/components/home/home-media-carousel"
 import { buttonVariants } from "@/components/ui/button"
-import { routeForHref, routeForPillar } from "@/lib/locale-links"
+import { routeForHref } from "@/lib/locale-links"
 import { cn } from "@/lib/utils"
 import {
   homeCardClassName,
@@ -167,14 +167,13 @@ function HomeHeroDesktop({
                 className="flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-2 md:gap-5"
               >
                 {chrome.nav.pillars.map((pillar) => (
-                  <Link
+                  <a
                     key={pillar.id}
-                    to={routeForPillar(pillar.id)}
-                    params={{ locale }}
+                    href={pillar.href}
                     className={homeHeroNavLinkClassName}
                   >
                     {pillar.label}
-                  </Link>
+                  </a>
                 ))}
                 <Link
                   to={routeForHref("/community")}

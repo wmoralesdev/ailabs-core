@@ -11,9 +11,9 @@ export const en: SiteContent = {
   chrome: {
     nav: {
       pillars: [
-        { id: "academy", label: "Academy", href: "/academy" },
-        { id: "agentic", label: "Agentic", href: "/agentic" },
-        { id: "aperture", label: "Aperture", href: "/aperture" },
+        { id: "academy", label: "Academy", href: "#academy" },
+        { id: "agentic", label: "Agentic", href: "#agentic" },
+        { id: "aperture", label: "Aperture", href: "#aperture" },
       ],
       community: { label: "Community", href: "/community" },
       contact: { label: "Contact", href: "#contact" },
@@ -26,9 +26,9 @@ export const en: SiteContent = {
         {
           title: "Pillars",
           links: [
-            { label: "Academy", href: "/academy" },
-            { label: "Agentic", href: "/agentic" },
-            { label: "Aperture", href: "/aperture" },
+            { label: "Academy", href: "#academy" },
+            { label: "Agentic", href: "#agentic" },
+            { label: "Aperture", href: "#aperture" },
           ],
         },
         {

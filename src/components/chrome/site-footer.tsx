@@ -6,7 +6,12 @@ import type { FooterContent, Locale, NavItem } from "@/content"
 
 import { formatCopyright } from "@/content"
 import { SiteLogo } from "@/components/chrome/site-logo"
-import { isInternalHref, routeForHref } from "@/lib/locale-links"
+import {
+  hashFromHref,
+  isHashHref,
+  isInternalHref,
+  routeForHref,
+} from "@/lib/locale-links"
 import { cn } from "@/lib/utils"
 
 type SiteFooterProps = {
@@ -36,6 +41,19 @@ function FooterLink({ link, locale }: { link: NavItem; locale: Locale }) {
       <Link
         to={routeForHref(link.href)}
         params={{ locale }}
+        className={footerLinkClassName}
+      >
+        {link.label}
+      </Link>
+    )
+  }
+
+  if (isHashHref(link.href)) {
+    return (
+      <Link
+        to="/$locale"
+        params={{ locale }}
+        hash={hashFromHref(link.href)}
         className={footerLinkClassName}
       >
         {link.label}
