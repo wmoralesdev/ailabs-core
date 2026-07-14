@@ -68,6 +68,9 @@ possibly stale value into this file.
   Do not describe them as shipped pages.
 - `/$locale/redeem` is an authenticated credit-redemption flow backed by
   Clerk, TanStack server functions, Prisma, and PostgreSQL/Neon.
+- `/$locale/community` is a minimal WhatsApp invite landing that reuses the
+  redeem dual-hero chrome (no auth). Community appears in chrome nav, home
+  hero nav, and the footer.
 - The home contact form currently validates in the browser and simulates a
   successful submission; it is not connected to a delivery backend.
 
