@@ -6,25 +6,20 @@ import {
   UserButton,
   useUser,
 } from "@clerk/tanstack-react-start"
-import { Link, createFileRoute, useRouterState } from "@tanstack/react-router"
+import { createFileRoute, useRouterState } from "@tanstack/react-router"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
 import { toast } from "sonner"
 
-import { SiteLogo } from "@/components/chrome/site-logo"
-import { ThemeToggle } from "@/components/chrome/theme-toggle"
-import { HomeHeroStipple } from "@/components/home/home-hero-stipple"
-import { HomeMediaCarousel } from "@/components/home/home-media-carousel"
+import { RedeemHeroDesktop } from "@/components/redeem/redeem-hero-desktop"
+import { RedeemHeroMobile } from "@/components/redeem/redeem-hero-mobile"
 import {
-  homeCardClassName,
   homeDisplayClassName,
   homeLabelClassName,
   homePillClassName,
-  homeShellClassName,
 } from "@/components/home/home-styles"
-import { buttonVariants } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
-import { LOCALES, getContent, isLocale } from "@/content"
+import { getContent, isLocale } from "@/content"
 import type { Locale, MicrocopyContent, RedeemContent } from "@/content/types"
 import { getRedeemProductConfig } from "@/lib/redeem-products"
 import type { RedeemProductConfig } from "@/lib/redeem-products"
@@ -40,6 +35,9 @@ import type {
 type RedeemSearch = {
   code?: string
 }
+
+type RedeemHeroTone = "onLight" | "onDark"
+type RedeemHeroSurface = "mobile" | "desktop"
 
 export const Route = createFileRoute("/$locale/redeem")({
   validateSearch: (search: Record<string, unknown>): RedeemSearch => {
@@ -80,6 +78,9 @@ export const Route = createFileRoute("/$locale/redeem")({
 const revealBaseClassName =
   "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
 
+const onDarkLabelClassName =
+  "border-on-dark/25 bg-on-dark/10 text-on-dark inline-flex w-fit items-center rounded-full border px-3 py-1 text-xs font-semibold tracking-wider uppercase backdrop-blur-sm"
+
 function RedeemPage() {
   const { locale, content: siteContent } = Route.useRouteContext()
   const { code } = Route.useSearch()
@@ -97,18 +98,24 @@ function RedeemPage() {
         microcopy={microcopy}
         mediaSrcs={mediaSrcs}
         mediaAlt={mediaAlt}
-        left={
+        redeemContent={content}
+        left={(tone) => (
           <StatusPanel
             title={content.missingCodeTitle}
             body={content.missingCodeBody}
+            tone={tone}
           />
-        }
-        leftFooter={<RedeemFootNote text={content.poweredBy} />}
-        right={
-          <RightStatus
-            title={content.missingCodeTitle}
-            body={content.missingCodeBody}
-          />
+        )}
+        leftFooter={(tone) => (
+          <RedeemFootNote text={content.poweredBy} tone={tone} />
+        )}
+        right={(surface) =>
+          surface === "desktop" ? (
+            <RightStatus
+              title={content.missingCodeTitle}
+              body={content.missingCodeBody}
+            />
+          ) : null
         }
       />
     )
@@ -121,18 +128,24 @@ function RedeemPage() {
         microcopy={microcopy}
         mediaSrcs={mediaSrcs}
         mediaAlt={mediaAlt}
-        left={
+        redeemContent={content}
+        left={(tone) => (
           <StatusPanel
             title={content.invalidTitle}
             body={content.invalidBody}
+            tone={tone}
           />
-        }
-        leftFooter={<RedeemFootNote text={content.poweredBy} />}
-        right={
-          <RightStatus
-            title={content.invalidTitle}
-            body={content.invalidBody}
-          />
+        )}
+        leftFooter={(tone) => (
+          <RedeemFootNote text={content.poweredBy} tone={tone} />
+        )}
+        right={(surface) =>
+          surface === "desktop" ? (
+            <RightStatus
+              title={content.invalidTitle}
+              body={content.invalidBody}
+            />
+          ) : null
         }
       />
     )
@@ -145,18 +158,24 @@ function RedeemPage() {
         microcopy={microcopy}
         mediaSrcs={mediaSrcs}
         mediaAlt={mediaAlt}
-        left={
+        redeemContent={content}
+        left={(tone) => (
           <StatusPanel
             title={content.inactiveTitle}
             body={content.inactiveBody}
+            tone={tone}
           />
-        }
-        leftFooter={<RedeemFootNote text={content.poweredBy} />}
-        right={
-          <RightStatus
-            title={content.inactiveTitle}
-            body={content.inactiveBody}
-          />
+        )}
+        leftFooter={(tone) => (
+          <RedeemFootNote text={content.poweredBy} tone={tone} />
+        )}
+        right={(surface) =>
+          surface === "desktop" ? (
+            <RightStatus
+              title={content.inactiveTitle}
+              body={content.inactiveBody}
+            />
+          ) : null
         }
       />
     )
@@ -171,16 +190,18 @@ function RedeemPage() {
       microcopy={microcopy}
       mediaSrcs={mediaSrcs}
       mediaAlt={mediaAlt}
-      left={
+      redeemContent={content}
+      left={(tone) => (
         <ProductInfo
           content={content}
           product={product}
           productCopy={productCopy}
           eventName={event.name}
+          tone={tone}
         />
-      }
-      leftFooter={<RedeemSteps content={content} />}
-      right={<RedeemAction code={code} content={content} />}
+      )}
+      leftFooter={(tone) => <RedeemSteps content={content} tone={tone} />}
+      right={() => <RedeemAction code={code} content={content} />}
     />
   )
 }
@@ -195,12 +216,16 @@ function ProductInfo({
   product,
   productCopy,
   eventName,
+  tone = "onLight",
 }: {
   content: RedeemContent
   product: RedeemProductConfig
   productCopy: { title: string; blurb: string }
   eventName: string
+  tone?: RedeemHeroTone
 }) {
+  const onDark = tone === "onDark"
+
   return (
     <div className="flex w-full max-w-xl flex-col gap-5 lg:max-w-none">
       <div
@@ -214,16 +239,24 @@ function ProductInfo({
             key={logo.alt}
             src={logo.dark}
             alt={logo.alt}
-            className="h-6 w-auto brightness-0 invert dark:invert-0"
+            className={cn(
+              "h-6 w-auto",
+              onDark
+                ? "brightness-0 invert"
+                : "brightness-0 invert dark:invert-0"
+            )}
           />
         ))}
-        <span className={homeLabelClassName}>{content.eventLabel}</span>
+        <span className={onDark ? onDarkLabelClassName : homeLabelClassName}>
+          {content.eventLabel}
+        </span>
       </div>
 
       <h1
         className={cn(
           homeDisplayClassName,
           "text-4xl leading-[0.95] sm:text-5xl md:text-5xl",
+          onDark && "text-on-dark",
           revealBaseClassName,
           "motion-safe:delay-75"
         )}
@@ -238,10 +271,20 @@ function ProductInfo({
           "motion-safe:delay-150"
         )}
       >
-        <p className="font-display text-foreground text-lg font-semibold tracking-tight md:text-xl">
+        <p
+          className={cn(
+            "font-display text-lg font-semibold tracking-tight md:text-xl",
+            onDark ? "text-on-dark" : "text-foreground"
+          )}
+        >
           {productCopy.title}
         </p>
-        <p className="text-muted-foreground text-base leading-relaxed md:text-lg">
+        <p
+          className={cn(
+            "text-base leading-relaxed md:text-lg",
+            onDark ? "text-on-dark/80" : "text-muted-foreground"
+          )}
+        >
           {productCopy.blurb}
         </p>
       </div>
@@ -334,27 +377,67 @@ function RedeemAction({
   )
 }
 
-function RedeemSteps({ content }: { content: RedeemContent }) {
+function RedeemSteps({
+  content,
+  tone = "onLight",
+}: {
+  content: RedeemContent
+  tone?: RedeemHeroTone
+}) {
+  const onDark = tone === "onDark"
+
   return (
-    <div className="border-border/60 flex flex-col gap-4 border-t pt-6">
-      <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+    <div
+      className={cn(
+        "flex flex-col gap-4 border-t pt-6",
+        onDark ? "border-on-dark/20" : "border-border/60"
+      )}
+    >
+      <p
+        className={cn(
+          "text-xs font-semibold tracking-wider uppercase",
+          onDark ? "text-on-dark/70" : "text-muted-foreground"
+        )}
+      >
         {content.howItWorksLabel}
       </p>
-      <ol className="sm:divide-border/60 grid gap-5 sm:grid-cols-3 sm:gap-0 sm:divide-x">
+      <ol
+        className={cn(
+          "grid gap-5 sm:grid-cols-3 sm:gap-0 sm:divide-x",
+          onDark ? "sm:divide-on-dark/20" : "sm:divide-border/60"
+        )}
+      >
         {content.steps.map((step, index) => (
           <li
             key={step.title}
             className="flex flex-col gap-1.5 sm:px-5 sm:first:pl-0 sm:last:pr-0"
           >
             <div className="flex items-center gap-2.5">
-              <span className="border-purple/50 bg-purple/10 text-purple flex size-6 shrink-0 items-center justify-center rounded-full border font-mono text-xs font-semibold">
+              <span
+                className={cn(
+                  "flex size-6 shrink-0 items-center justify-center rounded-full border font-mono text-xs font-semibold",
+                  onDark
+                    ? "border-on-dark/30 bg-on-dark/10 text-on-dark"
+                    : "border-purple/50 bg-purple/10 text-purple"
+                )}
+              >
                 {index + 1}
               </span>
-              <span className="text-foreground text-sm font-medium">
+              <span
+                className={cn(
+                  "text-sm font-medium",
+                  onDark ? "text-on-dark" : "text-foreground"
+                )}
+              >
                 {step.title}
               </span>
             </div>
-            <p className="text-muted-foreground text-xs leading-relaxed">
+            <p
+              className={cn(
+                "text-xs leading-relaxed",
+                onDark ? "text-on-dark/70" : "text-muted-foreground"
+              )}
+            >
               {step.body}
             </p>
           </li>
@@ -369,6 +452,7 @@ function RedeemHeroShell({
   microcopy,
   mediaSrcs,
   mediaAlt,
+  redeemContent,
   left,
   right,
   leftFooter,
@@ -377,119 +461,74 @@ function RedeemHeroShell({
   microcopy: MicrocopyContent
   mediaSrcs: ReadonlyArray<string>
   mediaAlt: string
-  left: React.ReactNode
-  right: React.ReactNode
-  leftFooter?: React.ReactNode
+  redeemContent: RedeemContent
+  left: (tone: RedeemHeroTone) => React.ReactNode
+  right: (surface: RedeemHeroSurface) => React.ReactNode
+  leftFooter?: (tone: RedeemHeroTone) => React.ReactNode
 }) {
-  const otherLocale =
-    LOCALES.find((candidate) => candidate !== locale) ?? locale
-
   return (
-    <section
-      className={cn(
-        homeShellClassName,
-        "flex min-h-dvh flex-col pt-4 pb-10 md:pt-6 md:pb-14"
-      )}
-    >
+    <div className="relative">
       <a
         href="#redeem-main"
         className="bg-background text-foreground focus-visible:ring-ring sr-only rounded-sm px-3 py-2 text-sm font-medium focus-visible:not-sr-only focus-visible:absolute focus-visible:top-2 focus-visible:left-2 focus-visible:z-50 focus-visible:ring-2"
       >
         {microcopy.skipToContent}
       </a>
-
-      <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-2 lg:grid-rows-1 lg:gap-5">
-        <div
-          className={cn(
-            homeCardClassName,
-            "home-hero-invert bg-surface-soft relative flex h-auto min-h-0 flex-col p-6 sm:p-8 md:p-10 lg:h-full",
-            "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
-          )}
-        >
-          <HomeHeroStipple />
-          <div className="relative z-10 flex min-h-0 flex-1 flex-col gap-10">
-            <div className="flex items-center justify-between gap-4">
-              <Link
-                to="/$locale"
-                params={{ locale }}
-                aria-label="Ai Labs"
-                className="focus-visible:ring-ring/50 rounded-sm focus-visible:ring-2 focus-visible:outline-none"
-              >
-                <SiteLogo variant="lockup" onDark className="dark:hidden" />
-                <SiteLogo
-                  variant="lockup"
-                  onLight
-                  className="hidden dark:block"
-                />
-              </Link>
-            </div>
-
-            <div
-              id="redeem-main"
-              className="flex min-h-0 flex-1 flex-col justify-center py-4"
-            >
-              {left}
-            </div>
-
-            {leftFooter}
-          </div>
-        </div>
-
-        <div
-          className={cn(
-            homeCardClassName,
-            "bg-graphite relative flex h-auto min-h-[22rem] flex-col overflow-hidden lg:h-full",
-            "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-100 motion-safe:duration-500"
-          )}
-        >
-          <HomeMediaCarousel
-            images={mediaSrcs}
-            alt={mediaAlt}
-            intervalMs={4500}
-          />
-          <div className="absolute inset-0 z-[2] bg-black/55" aria-hidden />
-
-          <div className="relative z-10 flex h-full flex-col p-6 sm:p-8 md:p-10">
-            <div className="[&_button]:text-on-dark [&_button]:hover:bg-on-dark/10 [&_button]:hover:text-on-dark flex items-center justify-end gap-1">
-              <ThemeToggle
-                labels={{
-                  cycle: microcopy.themeCycle,
-                  toLight: microcopy.themeToLight,
-                  toDark: microcopy.themeToDark,
-                  toSystem: microcopy.themeToSystem,
-                }}
-              />
-              <Link
-                to="."
-                params={{ locale: otherLocale }}
-                search={(prev) => prev}
-                aria-label={microcopy.languageSwitch}
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "sm" }),
-                  "text-on-dark hover:bg-on-dark/10 hover:text-on-dark text-xs font-semibold tracking-wider uppercase"
-                )}
-              >
-                {microcopy.languageSwitch}
-              </Link>
-            </div>
-
-            <div className="flex min-h-0 flex-1 flex-col justify-end pt-8">
-              {right}
-            </div>
-          </div>
-        </div>
+      <div id="redeem-main">
+        <RedeemHeroMobile
+          className="lg:hidden"
+          locale={locale}
+          microcopy={microcopy}
+          mediaSrcs={mediaSrcs}
+          mediaAlt={mediaAlt}
+          redeemContent={redeemContent}
+          left={left("onDark")}
+          right={right("mobile")}
+          leftFooter={leftFooter?.("onDark")}
+        />
+        <RedeemHeroDesktop
+          className="hidden lg:flex"
+          locale={locale}
+          microcopy={microcopy}
+          mediaSrcs={mediaSrcs}
+          mediaAlt={mediaAlt}
+          redeemContent={redeemContent}
+          left={left("onLight")}
+          right={right("desktop")}
+          leftFooter={leftFooter?.("onLight")}
+        />
       </div>
-    </section>
+    </div>
   )
 }
 
-function StatusPanel({ title, body }: { title: string; body: string }) {
+function StatusPanel({
+  title,
+  body,
+  tone = "onLight",
+}: {
+  title: string
+  body: string
+  tone?: RedeemHeroTone
+}) {
+  const onDark = tone === "onDark"
+
   return (
     <div className="flex max-w-xl flex-col gap-4">
-      <h1 className="font-display text-foreground text-3xl font-semibold tracking-tight md:text-4xl">
+      <h1
+        className={cn(
+          "font-display text-3xl font-semibold tracking-tight md:text-4xl",
+          onDark ? "text-on-dark" : "text-foreground"
+        )}
+      >
         {title}
       </h1>
-      <p className="text-muted-foreground max-w-md text-base leading-relaxed md:text-lg">
+      <p
+        className={cn(
+          "max-w-md text-base leading-relaxed md:text-lg",
+          onDark ? "text-on-dark/80" : "text-muted-foreground"
+        )}
+      >
         {body}
       </p>
     </div>
@@ -509,11 +548,29 @@ function RightStatus({ title, body }: { title: string; body: string }) {
   )
 }
 
-function RedeemFootNote({ text }: { text: string }) {
+function RedeemFootNote({
+  text,
+  tone = "onLight",
+}: {
+  text: string
+  tone?: RedeemHeroTone
+}) {
+  const onDark = tone === "onDark"
+
   return (
-    <div className="border-border/60 flex items-center gap-2 border-t pt-6">
+    <div
+      className={cn(
+        "flex items-center gap-2 border-t pt-6",
+        onDark ? "border-on-dark/20" : "border-border/60"
+      )}
+    >
       <span className="bg-purple size-1.5 rounded-full" aria-hidden />
-      <p className="text-muted-foreground text-xs font-medium tracking-wide">
+      <p
+        className={cn(
+          "text-xs font-medium tracking-wide",
+          onDark ? "text-on-dark/70" : "text-muted-foreground"
+        )}
+      >
         {text}
       </p>
     </div>
@@ -714,10 +771,11 @@ function CodesList({
           <li
             key={`${entry.pool}-${entry.code}`}
             className={cn(
-              "flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
+              "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4",
+              "lg:rounded-2xl lg:border lg:p-4",
               onDark
-                ? "border-on-dark/15 bg-on-dark/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-                : "bg-background/70 border-border/60"
+                ? "lg:border-on-dark/15 lg:bg-on-dark/10 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                : "lg:bg-background/70 lg:border-border/60"
             )}
           >
             <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -752,14 +810,28 @@ const codeActionClassName = cn(
 )
 
 function getHttpUrl(value: string): string | null {
+  const trimmed = value.trim()
+  if (!trimmed) {
+    return null
+  }
+
   try {
-    const url = new URL(value.trim())
+    const url = new URL(trimmed)
     if (url.protocol === "http:" || url.protocol === "https:") {
       return url.href
     }
     return null
   } catch {
-    return null
+    // Bare host paths (e.g. chatgpt.com/codex/p/...) are openable links.
+    try {
+      const url = new URL(`https://${trimmed}`)
+      if (!url.hostname.includes(".")) {
+        return null
+      }
+      return url.href
+    } catch {
+      return null
+    }
   }
 }
 
