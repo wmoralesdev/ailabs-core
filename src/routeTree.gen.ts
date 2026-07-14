@@ -16,6 +16,7 @@ import { Route as LocaleIndexRouteImport } from './routes/$locale/index'
 import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
 import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
 import { Route as LocaleRedeemRouteImport } from './routes/$locale/redeem'
+import { Route as LocaleCommunityRouteImport } from './routes/$locale/community'
 import { Route as LocaleApertureRouteImport } from './routes/$locale/aperture'
 import { Route as LocaleAgenticRouteImport } from './routes/$locale/agentic'
 import { Route as LocaleAcademyRouteImport } from './routes/$locale/academy'
@@ -55,6 +56,11 @@ const LocaleRedeemRoute = LocaleRedeemRouteImport.update({
   path: '/redeem',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleCommunityRoute = LocaleCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleApertureRoute = LocaleApertureRouteImport.update({
   id: '/aperture',
   path: '/aperture',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/$locale/academy': typeof LocaleAcademyRoute
   '/$locale/agentic': typeof LocaleAgenticRoute
   '/$locale/aperture': typeof LocaleApertureRoute
+  '/$locale/community': typeof LocaleCommunityRoute
   '/$locale/redeem': typeof LocaleRedeemRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/$locale/academy': typeof LocaleAcademyRoute
   '/$locale/agentic': typeof LocaleAgenticRoute
   '/$locale/aperture': typeof LocaleApertureRoute
+  '/$locale/community': typeof LocaleCommunityRoute
   '/$locale/redeem': typeof LocaleRedeemRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/$locale/academy': typeof LocaleAcademyRoute
   '/$locale/agentic': typeof LocaleAgenticRoute
   '/$locale/aperture': typeof LocaleApertureRoute
+  '/$locale/community': typeof LocaleCommunityRoute
   '/$locale/redeem': typeof LocaleRedeemRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/$locale/academy'
     | '/$locale/agentic'
     | '/$locale/aperture'
+    | '/$locale/community'
     | '/$locale/redeem'
     | '/sign-in/$'
     | '/sign-up/$'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/$locale/academy'
     | '/$locale/agentic'
     | '/$locale/aperture'
+    | '/$locale/community'
     | '/$locale/redeem'
     | '/sign-in/$'
     | '/sign-up/$'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/$locale/academy'
     | '/$locale/agentic'
     | '/$locale/aperture'
+    | '/$locale/community'
     | '/$locale/redeem'
     | '/sign-in/$'
     | '/sign-up/$'
@@ -204,6 +216,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleRedeemRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/community': {
+      id: '/$locale/community'
+      path: '/community'
+      fullPath: '/$locale/community'
+      preLoaderRoute: typeof LocaleCommunityRouteImport
+      parentRoute: typeof LocaleRoute
+    }
     '/$locale/aperture': {
       id: '/$locale/aperture'
       path: '/aperture'
@@ -232,6 +251,7 @@ interface LocaleRouteChildren {
   LocaleAcademyRoute: typeof LocaleAcademyRoute
   LocaleAgenticRoute: typeof LocaleAgenticRoute
   LocaleApertureRoute: typeof LocaleApertureRoute
+  LocaleCommunityRoute: typeof LocaleCommunityRoute
   LocaleRedeemRoute: typeof LocaleRedeemRoute
   LocaleIndexRoute: typeof LocaleIndexRoute
 }
@@ -240,6 +260,7 @@ const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleAcademyRoute: LocaleAcademyRoute,
   LocaleAgenticRoute: LocaleAgenticRoute,
   LocaleApertureRoute: LocaleApertureRoute,
+  LocaleCommunityRoute: LocaleCommunityRoute,
   LocaleRedeemRoute: LocaleRedeemRoute,
   LocaleIndexRoute: LocaleIndexRoute,
 }

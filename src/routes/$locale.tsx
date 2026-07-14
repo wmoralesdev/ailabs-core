@@ -36,7 +36,9 @@ function LocaleLayout() {
     select: (state) =>
       state.matches.some(
         (match) =>
-          match.routeId === "/$locale/" || match.routeId === "/$locale/redeem"
+          match.routeId === "/$locale/" ||
+          match.routeId === "/$locale/redeem" ||
+          match.routeId === "/$locale/community"
       ),
   })
 
