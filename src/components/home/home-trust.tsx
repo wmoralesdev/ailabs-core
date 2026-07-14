@@ -1,4 +1,9 @@
-import type { ComponentType } from "react"
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ComponentType,
+} from "react"
 
 import { ClaudeLogo } from "@/components/logos/claude"
 import { CodexLogo } from "@/components/logos/codex"
@@ -21,6 +26,9 @@ type ModeLogoProps = {
 }
 
 const logoClassName = "h-7 w-auto shrink-0 text-foreground"
+
+const trustLogoListClassName =
+  "flex shrink-0 items-center gap-10 pr-10 md:gap-14 md:pr-14"
 
 function ThemeAwareLogo({
   Logo,
@@ -73,23 +81,32 @@ function TrustLogoList({
   keyPrefix,
   ariaHidden = false,
   wrap = false,
+  repeat = 1,
 }: {
   logos: HomeTrustContent["logos"]
   keyPrefix: string
   ariaHidden?: boolean
   wrap?: boolean
+  repeat?: number
 }) {
+  const items = Array.from({ length: repeat }, (_, setIndex) =>
+    logos.map((logo) => ({
+      logo,
+      key: `${keyPrefix}-${setIndex}-${logo.id}`,
+    }))
+  ).flat()
+
   return (
     <ul
       className={cn(
-        "flex shrink-0 items-center gap-10 md:gap-14",
-        wrap && "flex-wrap justify-center"
+        trustLogoListClassName,
+        wrap && "flex-wrap justify-center pr-0 md:pr-0"
       )}
       aria-hidden={ariaHidden || undefined}
     >
-      {logos.map((logo) => (
+      {items.map(({ logo, key }) => (
         <li
-          key={`${keyPrefix}-${logo.id}`}
+          key={key}
           className="flex items-center opacity-55 grayscale transition-opacity motion-safe:hover:opacity-90"
         >
           {!ariaHidden ? <span className="sr-only">{logo.name}</span> : null}
@@ -107,6 +124,30 @@ type HomeTrustProps = {
 }
 
 function HomeTrust({ trust }: HomeTrustProps) {
+  const marqueeRef = useRef<HTMLDivElement>(null)
+  const measureRef = useRef<HTMLUListElement>(null)
+  const [setsPerHalf, setSetsPerHalf] = useState(1)
+
+  useLayoutEffect(() => {
+    const marquee = marqueeRef.current
+    const measure = measureRef.current
+    if (!marquee || !measure) return
+
+    const update = () => {
+      const setWidth = measure.offsetWidth
+      const containerWidth = marquee.clientWidth
+      if (setWidth <= 0 || containerWidth <= 0) return
+      // Each animated half must be at least as wide as the viewport strip.
+      setSetsPerHalf(Math.max(1, Math.ceil(containerWidth / setWidth)))
+    }
+
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(marquee)
+    ro.observe(measure)
+    return () => ro.disconnect()
+  }, [trust.logos])
+
   return (
     <section
       id="trust"
@@ -115,10 +156,32 @@ function HomeTrust({ trust }: HomeTrustProps) {
     >
       <div className={cn(homeShellClassName, "flex flex-col gap-5")}>
         <p className={homeLabelClassName}>{trust.label}</p>
-        <div className="home-trust-marquee">
+        <div ref={marqueeRef} className="home-trust-marquee">
+          <ul
+            ref={measureRef}
+            className={cn(trustLogoListClassName, "home-trust-marquee-measure")}
+            aria-hidden="true"
+          >
+            {trust.logos.map((logo) => (
+              <li key={`measure-${logo.id}`} className="flex items-center">
+                <span className="flex items-center">
+                  <TrustLogoMark id={logo.id} />
+                </span>
+              </li>
+            ))}
+          </ul>
           <div className="home-trust-marquee-track">
-            <TrustLogoList logos={trust.logos} keyPrefix="a" />
-            <TrustLogoList logos={trust.logos} keyPrefix="b" ariaHidden />
+            <TrustLogoList
+              logos={trust.logos}
+              keyPrefix="a"
+              repeat={setsPerHalf}
+            />
+            <TrustLogoList
+              logos={trust.logos}
+              keyPrefix="b"
+              ariaHidden
+              repeat={setsPerHalf}
+            />
           </div>
           <div className="home-trust-marquee-static">
             <TrustLogoList logos={trust.logos} keyPrefix="static" wrap />

@@ -548,6 +548,12 @@
     );
 }
 
+.home-trust-marquee-measure {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+}
+
 .home-trust-marquee-track {
     display: none;
 }
@@ -560,7 +566,6 @@
     .home-trust-marquee-track {
         display: flex;
         width: max-content;
-        gap: 2.5rem;
         animation: home-trust-marquee 40s linear infinite;
     }
 
