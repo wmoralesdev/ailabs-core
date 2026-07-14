@@ -11,7 +11,7 @@ import {
 import { RedeemQrModal } from "@/components/redeem/redeem-qr-modal"
 import { buttonVariants } from "@/components/ui/button"
 import { LOCALES } from "@/content"
-import type { Locale, MicrocopyContent, RedeemContent } from "@/content/types"
+import type { CampaignQrCopy, Locale, MicrocopyContent } from "@/content/types"
 import { cn } from "@/lib/utils"
 
 type RedeemHeroDesktopProps = {
@@ -19,7 +19,7 @@ type RedeemHeroDesktopProps = {
   microcopy: MicrocopyContent
   mediaSrcs: ReadonlyArray<string>
   mediaAlt: string
-  redeemContent: RedeemContent
+  qrContent: CampaignQrCopy
   left: React.ReactNode
   right: React.ReactNode
   leftFooter?: React.ReactNode
@@ -31,7 +31,7 @@ function RedeemHeroDesktop({
   microcopy,
   mediaSrcs,
   mediaAlt,
-  redeemContent,
+  qrContent,
   left,
   right,
   leftFooter,
@@ -98,7 +98,7 @@ function RedeemHeroDesktop({
 
           <div className="relative z-10 flex h-full flex-col p-6 sm:p-8 md:p-10">
             <div className="[&_button]:text-on-dark [&_button]:hover:bg-on-dark/10 [&_button]:hover:text-on-dark flex items-center justify-end gap-1">
-              <RedeemQrModal content={redeemContent} />
+              <RedeemQrModal content={qrContent} />
               <ThemeToggle
                 labels={{
                   cycle: microcopy.themeCycle,

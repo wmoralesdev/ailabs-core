@@ -11,14 +11,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { buttonVariants } from "@/components/ui/button"
-import type { RedeemContent } from "@/content/types"
+import type { CampaignQrCopy } from "@/content/types"
 import { cn } from "@/lib/utils"
 
 export function RedeemQrModal({
   content,
   onDark = true,
 }: {
-  content: RedeemContent
+  content: CampaignQrCopy
   onDark?: boolean
 }) {
   const [siteUrl, setSiteUrl] = useState<string | null>(null)

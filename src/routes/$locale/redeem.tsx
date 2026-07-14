@@ -98,7 +98,7 @@ function RedeemPage() {
         microcopy={microcopy}
         mediaSrcs={mediaSrcs}
         mediaAlt={mediaAlt}
-        redeemContent={content}
+        qrContent={content}
         left={(tone) => (
           <StatusPanel
             title={content.missingCodeTitle}
@@ -128,7 +128,7 @@ function RedeemPage() {
         microcopy={microcopy}
         mediaSrcs={mediaSrcs}
         mediaAlt={mediaAlt}
-        redeemContent={content}
+        qrContent={content}
         left={(tone) => (
           <StatusPanel
             title={content.invalidTitle}
@@ -158,7 +158,7 @@ function RedeemPage() {
         microcopy={microcopy}
         mediaSrcs={mediaSrcs}
         mediaAlt={mediaAlt}
-        redeemContent={content}
+        qrContent={content}
         left={(tone) => (
           <StatusPanel
             title={content.inactiveTitle}
@@ -190,7 +190,7 @@ function RedeemPage() {
       microcopy={microcopy}
       mediaSrcs={mediaSrcs}
       mediaAlt={mediaAlt}
-      redeemContent={content}
+      qrContent={content}
       left={(tone) => (
         <ProductInfo
           content={content}
@@ -452,7 +452,7 @@ function RedeemHeroShell({
   microcopy,
   mediaSrcs,
   mediaAlt,
-  redeemContent,
+  qrContent,
   left,
   right,
   leftFooter,
@@ -461,7 +461,7 @@ function RedeemHeroShell({
   microcopy: MicrocopyContent
   mediaSrcs: ReadonlyArray<string>
   mediaAlt: string
-  redeemContent: RedeemContent
+  qrContent: RedeemContent
   left: (tone: RedeemHeroTone) => React.ReactNode
   right: (surface: RedeemHeroSurface) => React.ReactNode
   leftFooter?: (tone: RedeemHeroTone) => React.ReactNode
@@ -481,7 +481,7 @@ function RedeemHeroShell({
           microcopy={microcopy}
           mediaSrcs={mediaSrcs}
           mediaAlt={mediaAlt}
-          redeemContent={redeemContent}
+          qrContent={qrContent}
           left={left("onDark")}
           right={right("mobile")}
           leftFooter={leftFooter?.("onDark")}
@@ -492,7 +492,7 @@ function RedeemHeroShell({
           microcopy={microcopy}
           mediaSrcs={mediaSrcs}
           mediaAlt={mediaAlt}
-          redeemContent={redeemContent}
+          qrContent={qrContent}
           left={left("onLight")}
           right={right("desktop")}
           leftFooter={leftFooter?.("onLight")}

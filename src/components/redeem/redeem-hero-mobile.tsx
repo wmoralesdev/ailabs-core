@@ -7,7 +7,7 @@ import { homeHeroChromeHeightClassName } from "@/components/home/home-styles"
 import { RedeemQrModal } from "@/components/redeem/redeem-qr-modal"
 import { buttonVariants } from "@/components/ui/button"
 import { LOCALES } from "@/content"
-import type { Locale, MicrocopyContent, RedeemContent } from "@/content/types"
+import type { CampaignQrCopy, Locale, MicrocopyContent } from "@/content/types"
 import { useScrolledPastHero } from "@/hooks/use-scrolled-past-hero"
 import { cn } from "@/lib/utils"
 
@@ -16,7 +16,7 @@ type RedeemHeroMobileProps = {
   microcopy: MicrocopyContent
   mediaSrcs: ReadonlyArray<string>
   mediaAlt: string
-  redeemContent: RedeemContent
+  qrContent: CampaignQrCopy
   left: React.ReactNode
   right: React.ReactNode
   leftFooter?: React.ReactNode
@@ -28,7 +28,7 @@ function RedeemHeroMobile({
   microcopy,
   mediaSrcs,
   mediaAlt,
-  redeemContent,
+  qrContent,
   left,
   right,
   leftFooter,
@@ -72,7 +72,7 @@ function RedeemHeroMobile({
           </Link>
 
           <div className="flex shrink-0 items-center gap-1">
-            <RedeemQrModal content={redeemContent} onDark={!scrolled} />
+            <RedeemQrModal content={qrContent} onDark={!scrolled} />
             <ThemeToggle
               labels={{
                 cycle: microcopy.themeCycle,
