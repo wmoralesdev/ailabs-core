@@ -20,8 +20,15 @@ export type NavContent = {
     label: string
     href: string
   }>
+  community: NavItem
   contact: NavItem
   cta: NavItem
+}
+
+export type CampaignQrCopy = {
+  qrCta: string
+  qrTitle: string
+  qrBody: string
 }
 
 export type FooterColumn = {
@@ -65,7 +72,7 @@ export type RedeemStep = {
   body: string
 }
 
-export type RedeemContent = {
+export type RedeemContent = CampaignQrCopy & {
   metaTitle: string
   eventLabel: string
   howItWorksLabel: string
@@ -95,9 +102,6 @@ export type RedeemContent = {
   noVerifiedEmailBody: string
   missingCodeTitle: string
   missingCodeBody: string
-  qrCta: string
-  qrTitle: string
-  qrBody: string
   poolLabels: {
     CURSOR: string
     CODEX: string
@@ -109,6 +113,25 @@ export type RedeemContent = {
     openai: RedeemProductCopy
     codexOpenai: RedeemProductCopy
   }
+}
+
+export type CommunityStep = {
+  title: string
+  body: string
+}
+
+export type CommunityContent = CampaignQrCopy & {
+  metaTitle: string
+  metaDescription: string
+  label: string
+  headline: string
+  body: string
+  joinPrompt: string
+  joinCta: string
+  joinHint: string
+  joinHref: string
+  howItWorksLabel: string
+  steps: ReadonlyArray<CommunityStep>
 }
 
 export type HomeStatIcon = "builders" | "events" | "partners"
@@ -268,4 +291,5 @@ export type SiteContent = {
   microcopy: MicrocopyContent
   home: HomeContent
   redeem: RedeemContent
+  community: CommunityContent
 }

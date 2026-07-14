@@ -15,6 +15,7 @@ export const es: SiteContent = {
         { id: "agentic", label: "Agentic", href: "/agentic" },
         { id: "aperture", label: "Aperture", href: "/aperture" },
       ],
+      community: { label: "Comunidad", href: "/community" },
       contact: { label: "Contacto", href: "#contact" },
       cta: { label: "Hablemos", href: "#contact" },
     },
@@ -33,6 +34,7 @@ export const es: SiteContent = {
         {
           title: "Compañía",
           links: [
+            { label: "Comunidad", href: "/community" },
             { label: "Contacto", href: "#contact" },
             { label: "ailabs.sv", href: "https://ailabs.sv" },
           ],
@@ -349,5 +351,29 @@ export const es: SiteContent = {
           "Canjea tus códigos de Codex y OpenAI Platform de este evento.",
       },
     },
+  },
+  community: {
+    metaTitle: "Únete a la comunidad",
+    metaDescription:
+      "Únete a la comunidad de WhatsApp de Ai Labs — builders, eventos e IA práctica en El Salvador.",
+    label: "Comunidad",
+    headline: "Únete a la comunidad de WhatsApp de Ai Labs",
+    body: "Mantente cerca de eventos, talleres y builders que adaptan el trabajo real con IA.",
+    joinPrompt: "Builders, eventos y talleres — unirte es gratis.",
+    joinCta: "Unirme en WhatsApp",
+    joinHint: "Abre WhatsApp · puede pedir aprobación",
+    joinHref: "https://chat.whatsapp.com/Ga8mG1fqDM9C0ryxAw1eIj",
+    howItWorksLabel: "Cómo funciona",
+    steps: [
+      { title: "Abre la invitación", body: "Toca Unirme en WhatsApp" },
+      {
+        title: "Solicita unirte",
+        body: "WhatsApp puede pedir aprobación",
+      },
+      { title: "Saluda", body: "Preséntate y sigue la conversación" },
+    ],
+    qrCta: "QR",
+    qrTitle: "Escanea para abrir",
+    qrBody: "Escanea este código para abrir esta página en otro dispositivo.",
   },
 }
