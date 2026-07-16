@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Split trip rooms — Neon Postgres
 
 generator client {
   provider = "prisma-client"
@@ -10,69 +9,59 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Product {
-  CURSOR
-  CODEX
-  OPENAI
-  CODEX_OPENAI
-}
-
-enum Pool {
-  CURSOR
-  CODEX
-  OPENAI
-}
-
-model Event {
+model Room {
   id        String   @id @default(cuid())
+  code      String   @unique
   name      String
-  product   Product
-  active    Boolean  @default(true)
+  currency  String
   createdAt DateTime @default(now())
 
-  eligibleEmails EligibleEmail[]
-  promoCodes     PromoCode[]
-  redemptions    Redemption[]
+  members  Member[]
+  expenses Expense[]
+
+  @@index([createdAt])
 }
 
-model EligibleEmail {
-  id      String @id @default(cuid())
-  eventId String
-  email   String
+model Member {
+  id        String   @id @default(cuid())
+  roomId    String
+  name      String
+  createdAt DateTime @default(now())
 
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  room          Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  paidExpenses  Expense[]      @relation("ExpensePayer")
+  shares        ExpenseShare[]
 
-  @@unique([eventId, email])
-  @@index([eventId])
+  @@index([roomId])
+  @@unique([roomId, name])
 }
 
-model Redemption {
+model Expense {
   id          String   @id @default(cuid())
-  eventId     String
-  email       String
-  clerkUserId String
+  roomId      String
+  title       String
+  amountCents Int
+  paidById    String
   createdAt   DateTime @default(now())
 
-  event      Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  promoCodes PromoCode[]
+  room   Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  paidBy Member         @relation("ExpensePayer", fields: [paidById], references: [id], onDelete: Restrict)
+  shares ExpenseShare[]
 
-  @@unique([eventId, email])
-  @@index([eventId])
+  @@index([roomId])
+  @@index([paidById])
 }
 
-model PromoCode {
-  id           String    @id @default(cuid())
-  eventId      String?
-  pool         Pool
-  code         String
-  redemptionId String?
-  claimedAt    DateTime?
-  createdAt    DateTime  @default(now())
+model ExpenseShare {
+  id          String @id @default(cuid())
+  expenseId   String
+  memberId    String
+  amountCents Int
 
-  event      Event?      @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  redemption Redemption? @relation(fields: [redemptionId], references: [id], onDelete: SetNull)
+  expense Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  member  Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
-  @@unique([pool, code])
-  @@index([eventId, pool, redemptionId])
-  @@index([pool, eventId, redemptionId])
+  @@index([expenseId])
+  @@index([memberId])
+  @@unique([expenseId, memberId])
 }

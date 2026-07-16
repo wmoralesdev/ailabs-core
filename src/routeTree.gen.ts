@@ -9,178 +9,66 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as BgRouteImport } from './routes/bg'
-import { Route as LocaleRouteImport } from './routes/$locale'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LocaleIndexRouteImport } from './routes/$locale/index'
-import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
-import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
-import { Route as LocaleRedeemRouteImport } from './routes/$locale/redeem'
-import { Route as LocaleCommunityRouteImport } from './routes/$locale/community'
-import { Route as LocaleApertureRouteImport } from './routes/$locale/aperture'
-import { Route as LocaleAgenticRouteImport } from './routes/$locale/agentic'
-import { Route as LocaleAcademyRouteImport } from './routes/$locale/academy'
+import { Route as RCodeRouteImport } from './routes/r.$code'
+import { Route as RCodeSettleRouteImport } from './routes/r.$code.settle'
+import { Route as RCodeNewRouteImport } from './routes/r.$code.new'
 
-const BgRoute = BgRouteImport.update({
-  id: '/bg',
-  path: '/bg',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LocaleRoute = LocaleRouteImport.update({
-  id: '/$locale',
-  path: '/$locale',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LocaleIndexRoute = LocaleIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LocaleRoute,
-} as any)
-const SignUpSplatRoute = SignUpSplatRouteImport.update({
-  id: '/sign-up/$',
-  path: '/sign-up/$',
+const RCodeRoute = RCodeRouteImport.update({
+  id: '/r/$code',
+  path: '/r/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SignInSplatRoute = SignInSplatRouteImport.update({
-  id: '/sign-in/$',
-  path: '/sign-in/$',
-  getParentRoute: () => rootRouteImport,
+const RCodeSettleRoute = RCodeSettleRouteImport.update({
+  id: '/settle',
+  path: '/settle',
+  getParentRoute: () => RCodeRoute,
 } as any)
-const LocaleRedeemRoute = LocaleRedeemRouteImport.update({
-  id: '/redeem',
-  path: '/redeem',
-  getParentRoute: () => LocaleRoute,
-} as any)
-const LocaleCommunityRoute = LocaleCommunityRouteImport.update({
-  id: '/community',
-  path: '/community',
-  getParentRoute: () => LocaleRoute,
-} as any)
-const LocaleApertureRoute = LocaleApertureRouteImport.update({
-  id: '/aperture',
-  path: '/aperture',
-  getParentRoute: () => LocaleRoute,
-} as any)
-const LocaleAgenticRoute = LocaleAgenticRouteImport.update({
-  id: '/agentic',
-  path: '/agentic',
-  getParentRoute: () => LocaleRoute,
-} as any)
-const LocaleAcademyRoute = LocaleAcademyRouteImport.update({
-  id: '/academy',
-  path: '/academy',
-  getParentRoute: () => LocaleRoute,
+const RCodeNewRoute = RCodeNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => RCodeRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$locale': typeof LocaleRouteWithChildren
-  '/bg': typeof BgRoute
-  '/$locale/academy': typeof LocaleAcademyRoute
-  '/$locale/agentic': typeof LocaleAgenticRoute
-  '/$locale/aperture': typeof LocaleApertureRoute
-  '/$locale/community': typeof LocaleCommunityRoute
-  '/$locale/redeem': typeof LocaleRedeemRoute
-  '/sign-in/$': typeof SignInSplatRoute
-  '/sign-up/$': typeof SignUpSplatRoute
-  '/$locale/': typeof LocaleIndexRoute
+  '/r/$code': typeof RCodeRouteWithChildren
+  '/r/$code/new': typeof RCodeNewRoute
+  '/r/$code/settle': typeof RCodeSettleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/bg': typeof BgRoute
-  '/$locale/academy': typeof LocaleAcademyRoute
-  '/$locale/agentic': typeof LocaleAgenticRoute
-  '/$locale/aperture': typeof LocaleApertureRoute
-  '/$locale/community': typeof LocaleCommunityRoute
-  '/$locale/redeem': typeof LocaleRedeemRoute
-  '/sign-in/$': typeof SignInSplatRoute
-  '/sign-up/$': typeof SignUpSplatRoute
-  '/$locale': typeof LocaleIndexRoute
+  '/r/$code': typeof RCodeRouteWithChildren
+  '/r/$code/new': typeof RCodeNewRoute
+  '/r/$code/settle': typeof RCodeSettleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$locale': typeof LocaleRouteWithChildren
-  '/bg': typeof BgRoute
-  '/$locale/academy': typeof LocaleAcademyRoute
-  '/$locale/agentic': typeof LocaleAgenticRoute
-  '/$locale/aperture': typeof LocaleApertureRoute
-  '/$locale/community': typeof LocaleCommunityRoute
-  '/$locale/redeem': typeof LocaleRedeemRoute
-  '/sign-in/$': typeof SignInSplatRoute
-  '/sign-up/$': typeof SignUpSplatRoute
-  '/$locale/': typeof LocaleIndexRoute
+  '/r/$code': typeof RCodeRouteWithChildren
+  '/r/$code/new': typeof RCodeNewRoute
+  '/r/$code/settle': typeof RCodeSettleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/$locale'
-    | '/bg'
-    | '/$locale/academy'
-    | '/$locale/agentic'
-    | '/$locale/aperture'
-    | '/$locale/community'
-    | '/$locale/redeem'
-    | '/sign-in/$'
-    | '/sign-up/$'
-    | '/$locale/'
+  fullPaths: '/' | '/r/$code' | '/r/$code/new' | '/r/$code/settle'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/bg'
-    | '/$locale/academy'
-    | '/$locale/agentic'
-    | '/$locale/aperture'
-    | '/$locale/community'
-    | '/$locale/redeem'
-    | '/sign-in/$'
-    | '/sign-up/$'
-    | '/$locale'
-  id:
-    | '__root__'
-    | '/'
-    | '/$locale'
-    | '/bg'
-    | '/$locale/academy'
-    | '/$locale/agentic'
-    | '/$locale/aperture'
-    | '/$locale/community'
-    | '/$locale/redeem'
-    | '/sign-in/$'
-    | '/sign-up/$'
-    | '/$locale/'
+  to: '/' | '/r/$code' | '/r/$code/new' | '/r/$code/settle'
+  id: '__root__' | '/' | '/r/$code' | '/r/$code/new' | '/r/$code/settle'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LocaleRoute: typeof LocaleRouteWithChildren
-  BgRoute: typeof BgRoute
-  SignInSplatRoute: typeof SignInSplatRoute
-  SignUpSplatRoute: typeof SignUpSplatRoute
+  RCodeRoute: typeof RCodeRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/bg': {
-      id: '/bg'
-      path: '/bg'
-      fullPath: '/bg'
-      preLoaderRoute: typeof BgRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$locale': {
-      id: '/$locale'
-      path: '/$locale'
-      fullPath: '/$locale'
-      preLoaderRoute: typeof LocaleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -188,103 +76,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$locale/': {
-      id: '/$locale/'
-      path: '/'
-      fullPath: '/$locale/'
-      preLoaderRoute: typeof LocaleIndexRouteImport
-      parentRoute: typeof LocaleRoute
-    }
-    '/sign-up/$': {
-      id: '/sign-up/$'
-      path: '/sign-up/$'
-      fullPath: '/sign-up/$'
-      preLoaderRoute: typeof SignUpSplatRouteImport
+    '/r/$code': {
+      id: '/r/$code'
+      path: '/r/$code'
+      fullPath: '/r/$code'
+      preLoaderRoute: typeof RCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sign-in/$': {
-      id: '/sign-in/$'
-      path: '/sign-in/$'
-      fullPath: '/sign-in/$'
-      preLoaderRoute: typeof SignInSplatRouteImport
-      parentRoute: typeof rootRouteImport
+    '/r/$code/settle': {
+      id: '/r/$code/settle'
+      path: '/settle'
+      fullPath: '/r/$code/settle'
+      preLoaderRoute: typeof RCodeSettleRouteImport
+      parentRoute: typeof RCodeRoute
     }
-    '/$locale/redeem': {
-      id: '/$locale/redeem'
-      path: '/redeem'
-      fullPath: '/$locale/redeem'
-      preLoaderRoute: typeof LocaleRedeemRouteImport
-      parentRoute: typeof LocaleRoute
-    }
-    '/$locale/community': {
-      id: '/$locale/community'
-      path: '/community'
-      fullPath: '/$locale/community'
-      preLoaderRoute: typeof LocaleCommunityRouteImport
-      parentRoute: typeof LocaleRoute
-    }
-    '/$locale/aperture': {
-      id: '/$locale/aperture'
-      path: '/aperture'
-      fullPath: '/$locale/aperture'
-      preLoaderRoute: typeof LocaleApertureRouteImport
-      parentRoute: typeof LocaleRoute
-    }
-    '/$locale/agentic': {
-      id: '/$locale/agentic'
-      path: '/agentic'
-      fullPath: '/$locale/agentic'
-      preLoaderRoute: typeof LocaleAgenticRouteImport
-      parentRoute: typeof LocaleRoute
-    }
-    '/$locale/academy': {
-      id: '/$locale/academy'
-      path: '/academy'
-      fullPath: '/$locale/academy'
-      preLoaderRoute: typeof LocaleAcademyRouteImport
-      parentRoute: typeof LocaleRoute
+    '/r/$code/new': {
+      id: '/r/$code/new'
+      path: '/new'
+      fullPath: '/r/$code/new'
+      preLoaderRoute: typeof RCodeNewRouteImport
+      parentRoute: typeof RCodeRoute
     }
   }
 }
 
-interface LocaleRouteChildren {
-  LocaleAcademyRoute: typeof LocaleAcademyRoute
-  LocaleAgenticRoute: typeof LocaleAgenticRoute
-  LocaleApertureRoute: typeof LocaleApertureRoute
-  LocaleCommunityRoute: typeof LocaleCommunityRoute
-  LocaleRedeemRoute: typeof LocaleRedeemRoute
-  LocaleIndexRoute: typeof LocaleIndexRoute
+interface RCodeRouteChildren {
+  RCodeNewRoute: typeof RCodeNewRoute
+  RCodeSettleRoute: typeof RCodeSettleRoute
 }
 
-const LocaleRouteChildren: LocaleRouteChildren = {
-  LocaleAcademyRoute: LocaleAcademyRoute,
-  LocaleAgenticRoute: LocaleAgenticRoute,
-  LocaleApertureRoute: LocaleApertureRoute,
-  LocaleCommunityRoute: LocaleCommunityRoute,
-  LocaleRedeemRoute: LocaleRedeemRoute,
-  LocaleIndexRoute: LocaleIndexRoute,
+const RCodeRouteChildren: RCodeRouteChildren = {
+  RCodeNewRoute: RCodeNewRoute,
+  RCodeSettleRoute: RCodeSettleRoute,
 }
 
-const LocaleRouteWithChildren =
-  LocaleRoute._addFileChildren(LocaleRouteChildren)
+const RCodeRouteWithChildren = RCodeRoute._addFileChildren(RCodeRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LocaleRoute: LocaleRouteWithChildren,
-  BgRoute: BgRoute,
-  SignInSplatRoute: SignInSplatRoute,
-  SignUpSplatRoute: SignUpSplatRoute,
+  RCodeRoute: RCodeRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
+import type { createStart } from '@tanstack/react-start'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

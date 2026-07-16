@@ -21,9 +21,5 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {
-    "@svgl": "https://svgl.app/r/{name}.json",
-    "@aceternity": "https://ui.aceternity.com/registry/{name}.json",
-    "@elements": "https://www.tryelements.dev/r/{name}.json"
-  }
+  "registries": {}
 }
